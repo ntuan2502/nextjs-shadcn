@@ -10,8 +10,8 @@ export const BackgroundBeamsWithCollision = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const parentRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
+  const parentRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
 
   const beams = [
     {
@@ -100,8 +100,8 @@ export const BackgroundBeamsWithCollision = ({
 const CollisionMechanism = React.forwardRef<
   HTMLDivElement,
   {
-    containerRef: React.RefObject<HTMLDivElement | null>;
-    parentRef: React.RefObject<HTMLDivElement | null>;
+    containerRef: React.RefObject<HTMLDivElement>;
+    parentRef: React.RefObject<HTMLDivElement>;
     beamOptions?: {
       initialX?: number;
       translateX?: number;
@@ -114,7 +114,8 @@ const CollisionMechanism = React.forwardRef<
       repeatDelay?: number;
     };
   }
->(({ parentRef, containerRef, beamOptions = {} }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+>(({ parentRef, containerRef, beamOptions = {} }, ref) => {
   const beamRef = useRef<HTMLDivElement>(null);
   const [collision, setCollision] = useState<{
     detected: boolean;
@@ -180,14 +181,14 @@ const CollisionMechanism = React.forwardRef<
         ref={beamRef}
         animate="animate"
         initial={{
-          y: beamOptions.initialY || "-200px",
-          x: beamOptions.initialX || "0px",
+          y: beamOptions.initialY ?? -200,
+          x: beamOptions.initialX ?? 0,
           rotate: beamOptions.rotate || 0,
         }}
         variants={{
           animate: {
-            y: beamOptions.translateY || "1800px",
-            x: beamOptions.translateX || "0px",
+            y: beamOptions.translateY ?? 1800,
+            x: beamOptions.translateX ?? 0,
             rotate: beamOptions.rotate || 0,
           },
         }}
