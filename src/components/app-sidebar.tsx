@@ -77,259 +77,255 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { PreferencesMenu } from "./preferences-menu";
-
-// Dữ liệu mẫu cho sidebar
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: Home,
-      items: [
-        {
-          title: "Overview",
-          url: "#",
-          icon: Eye,
-        },
-        {
-          title: "Analytics",
-          url: "#",
-          icon: Database,
-        },
-        {
-          title: "Reports",
-          url: "#",
-          icon: FileText,
-        },
-      ],
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: Folder,
-      items: [
-        {
-          title: "All Projects",
-          url: "#",
-          icon: Folder,
-        },
-        {
-          title: "Active Projects",
-          url: "#",
-          icon: Zap,
-          isActive: true,
-        },
-        {
-          title: "Completed",
-          url: "#",
-          icon: Check,
-        },
-        {
-          title: "Templates",
-          url: "#",
-          icon: FileText,
-        },
-      ],
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: Users,
-      items: [
-        {
-          title: "Members",
-          url: "#",
-          icon: UserIcon,
-        },
-        {
-          title: "Roles & Permissions",
-          url: "#",
-          icon: Shield,
-        },
-        {
-          title: "Invitations",
-          url: "#",
-          icon: Mail,
-        },
-        {
-          title: "Activity",
-          url: "#",
-          icon: Activity,
-        },
-      ],
-    },
-    {
-      title: "Development",
-      url: "#",
-      icon: Code,
-      items: [
-        {
-          title: "Repositories",
-          url: "#",
-          icon: GitBranch,
-        },
-        {
-          title: "Deployments",
-          url: "#",
-          icon: Rocket,
-        },
-        {
-          title: "API Keys",
-          url: "#",
-          icon: Key,
-        },
-        {
-          title: "Webhooks",
-          url: "#",
-          icon: Webhook,
-        },
-        {
-          title: "Documentation",
-          url: "#",
-          icon: BookOpen,
-        },
-      ],
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: BarChart,
-      items: [
-        {
-          title: "Traffic",
-          url: "#",
-          icon: TrendingUp,
-        },
-        {
-          title: "Performance",
-          url: "#",
-          icon: Cpu,
-        },
-        {
-          title: "Conversion",
-          url: "#",
-          icon: Target,
-        },
-        {
-          title: "User Behavior",
-          url: "#",
-          icon: MousePointer,
-        },
-      ],
-    },
-    {
-      title: "Marketing",
-      url: "#",
-      icon: Megaphone,
-      items: [
-        {
-          title: "Campaigns",
-          url: "#",
-          icon: Send,
-        },
-        {
-          title: "Email Lists",
-          url: "#",
-          icon: Mail,
-        },
-        {
-          title: "Social Media",
-          url: "#",
-          icon: Share2,
-        },
-        {
-          title: "SEO Tools",
-          url: "#",
-          icon: Search,
-        },
-      ],
-    },
-    {
-      title: "Finance",
-      url: "#",
-      icon: DollarSign,
-      items: [
-        {
-          title: "Billing",
-          url: "#",
-          icon: CreditCard,
-        },
-        {
-          title: "Invoices",
-          url: "#",
-          icon: Receipt,
-        },
-        {
-          title: "Subscriptions",
-          url: "#",
-          icon: Calendar,
-        },
-        {
-          title: "Tax Reports",
-          url: "#",
-          icon: FileText,
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-      items: [
-        {
-          title: "General",
-          url: "#",
-          icon: Settings,
-        },
-        {
-          title: "Security",
-          url: "#",
-          icon: Shield,
-        },
-        {
-          title: "Notifications",
-          url: "#",
-          icon: BellIcon,
-        },
-        {
-          title: "Integrations",
-          url: "#",
-          icon: Plug,
-        },
-        {
-          title: "API Settings",
-          url: "#",
-          icon: Code,
-        },
-      ],
-    },
-  ],
-};
+import { useTranslation } from "react-i18next";
 
 const userData = {
   name: "John Doe",
   email: "john@amata.com",
-  avatar: null, // Removed placeholder.svg that was causing 404
+  avatar: null,
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Check if we're on mobile
+  const { t } = useTranslation();
   const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    // Set initial state
-    setIsMobile(window.innerWidth < 768);
+  // Navigation data with translation keys
+  const data = {
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "#",
+        icon: Home,
+        items: [
+          {
+            title: "Overview",
+            url: "#",
+            icon: Eye,
+          },
+          {
+            title: "Analytics",
+            url: "#",
+            icon: Database,
+          },
+          {
+            title: "Reports",
+            url: "#",
+            icon: FileText,
+          },
+        ],
+      },
+      {
+        title: "Projects",
+        url: "#",
+        icon: Folder,
+        items: [
+          {
+            title: "All Projects",
+            url: "#",
+            icon: Folder,
+          },
+          {
+            title: "Active Projects",
+            url: "#",
+            icon: Zap,
+            isActive: true,
+          },
+          {
+            title: "Completed",
+            url: "#",
+            icon: Check,
+          },
+          {
+            title: "Templates",
+            url: "#",
+            icon: FileText,
+          },
+        ],
+      },
+      {
+        title: "Team",
+        url: "#",
+        icon: Users,
+        items: [
+          {
+            title: "Members",
+            url: "#",
+            icon: UserIcon,
+          },
+          {
+            title: "Roles & Permissions",
+            url: "#",
+            icon: Shield,
+          },
+          {
+            title: "Invitations",
+            url: "#",
+            icon: Mail,
+          },
+          {
+            title: "Activity",
+            url: "#",
+            icon: Activity,
+          },
+        ],
+      },
+      {
+        title: "Development",
+        url: "#",
+        icon: Code,
+        items: [
+          {
+            title: "Repositories",
+            url: "#",
+            icon: GitBranch,
+          },
+          {
+            title: "Deployments",
+            url: "#",
+            icon: Rocket,
+          },
+          {
+            title: "API Keys",
+            url: "#",
+            icon: Key,
+          },
+          {
+            title: "Webhooks",
+            url: "#",
+            icon: Webhook,
+          },
+          {
+            title: "Documentation",
+            url: "#",
+            icon: BookOpen,
+          },
+        ],
+      },
+      {
+        title: "Analytics",
+        url: "#",
+        icon: BarChart,
+        items: [
+          {
+            title: "Traffic",
+            url: "#",
+            icon: TrendingUp,
+          },
+          {
+            title: "Performance",
+            url: "#",
+            icon: Cpu,
+          },
+          {
+            title: "Conversion",
+            url: "#",
+            icon: Target,
+          },
+          {
+            title: "User Behavior",
+            url: "#",
+            icon: MousePointer,
+          },
+        ],
+      },
+      {
+        title: "Marketing",
+        url: "#",
+        icon: Megaphone,
+        items: [
+          {
+            title: "Campaigns",
+            url: "#",
+            icon: Send,
+          },
+          {
+            title: "Email Lists",
+            url: "#",
+            icon: Mail,
+          },
+          {
+            title: "Social Media",
+            url: "#",
+            icon: Share2,
+          },
+          {
+            title: "SEO Tools",
+            url: "#",
+            icon: Search,
+          },
+        ],
+      },
+      {
+        title: "Finance",
+        url: "#",
+        icon: DollarSign,
+        items: [
+          {
+            title: "Billing",
+            url: "#",
+            icon: CreditCard,
+          },
+          {
+            title: "Invoices",
+            url: "#",
+            icon: Receipt,
+          },
+          {
+            title: "Subscriptions",
+            url: "#",
+            icon: Calendar,
+          },
+          {
+            title: "Tax Reports",
+            url: "#",
+            icon: FileText,
+          },
+        ],
+      },
+      {
+        title: "Settings",
+        url: "#",
+        icon: Settings,
+        items: [
+          {
+            title: "General",
+            url: "#",
+            icon: Settings,
+          },
+          {
+            title: "Security",
+            url: "#",
+            icon: Shield,
+          },
+          {
+            title: "Notifications",
+            url: "#",
+            icon: BellIcon,
+          },
+          {
+            title: "Integrations",
+            url: "#",
+            icon: Plug,
+          },
+          {
+            title: "API Settings",
+            url: "#",
+            icon: Code,
+          },
+        ],
+      },
+    ],
+  };
 
-    // Add resize listener
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Get initials for avatar fallback
   const getInitials = (name: string) => {
     return name
       .split(" ")
@@ -338,7 +334,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       .toUpperCase();
   };
 
-  // User menu items for Sheet (mobile)
   const SheetMenuItems = () => (
     <div className="flex flex-col">
       <div className="flex items-center gap-3 p-4 border-b">
@@ -363,32 +358,31 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <div className="p-2 space-y-1">
         <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
           <Crown className="mr-3 h-4 w-4" />
-          Upgrade to Pro
+          {t("Upgrade to Pro")}
         </button>
         <Separator className="my-2" />
         <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
           <UserIcon className="mr-3 h-4 w-4" />
-          Account
+          {t("Account")}
         </button>
         <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
           <CreditCard className="mr-3 h-4 w-4" />
-          Billing
+          {t("Billing")}
         </button>
         <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
           <BellIcon className="mr-3 h-4 w-4" />
-          Notifications
+          {t("Notifications")}
         </button>
         <PreferencesMenu />
         <Separator className="my-2" />
         <button className="flex items-center w-full px-3 py-2 text-sm rounded-md transition-colors text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 cursor-pointer">
           <LogOut className="mr-3 h-4 w-4" />
-          Log out
+          {t("Log out")}
         </button>
       </div>
     </div>
   );
 
-  // User menu items for desktop dropdown
   const DropdownMenuItems = () => (
     <>
       <div className="flex items-center gap-3 p-4 border-b">
@@ -413,26 +407,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <div className="p-2 space-y-1">
         <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
           <Crown className="mr-3 h-4 w-4" />
-          Upgrade to Pro
+          {t("Upgrade to Pro")}
         </DropdownMenuItem>
         <DropdownMenuSeparator className="my-2" />
         <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
           <UserIcon className="mr-3 h-4 w-4" />
-          Account
+          {t("Account")}
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
           <CreditCard className="mr-3 h-4 w-4" />
-          Billing
+          {t("Billing")}
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
           <BellIcon className="mr-3 h-4 w-4" />
-          Notifications
+          {t("Notifications")}
         </DropdownMenuItem>
         <PreferencesMenu />
         <DropdownMenuSeparator className="my-2" />
         <DropdownMenuItem className="flex items-center px-3 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 focus:bg-red-50 dark:focus:bg-red-950/20 cursor-pointer">
           <LogOut className="mr-3 h-4 w-4" />
-          Log out
+          {t("Log out")}
         </DropdownMenuItem>
       </div>
     </>
@@ -448,17 +442,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">AMATA</span>
+                <span className="font-semibold">{t("AMATA")}</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="sidebar-scrollable">
-        {/* Tạo một SidebarGroup cho mỗi nhóm chính với Collapsible */}
-        {data.navMain.map((item) => (
+        {data.navMain.map((item, index) => (
           <Collapsible
-            key={item.title}
+            key={index}
             defaultOpen={true}
             className="group/collapsible"
           >
@@ -466,7 +459,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarGroupLabel asChild>
                 <CollapsibleTrigger className="flex w-full items-center gap-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md p-2 text-sm cursor-pointer">
                   <item.icon className="size-4" />
-                  <span>{item.title}</span>
+                  <span>{t(item.title)}</span>
                   <ChevronDown className="ml-auto size-4 transition-transform -rotate-90 group-data-[state=open]/collapsible:rotate-0" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
@@ -481,7 +474,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             className="flex items-center gap-2 cursor-pointer"
                           >
                             <subItem.icon className="size-4" />
-                            <span>{subItem.title}</span>
+                            <span>{t(subItem.title)}</span>
                           </a>
                         </SidebarMenuButton>
                       </SidebarMenuItem>

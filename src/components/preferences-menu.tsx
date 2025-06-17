@@ -12,40 +12,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const languages = [
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "vi", name: "Tiếng Việt", flag: "🇻🇳" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "ja", name: "日本語", flag: "🇯🇵" },
-  { code: "ko", name: "한국어", flag: "🇰🇷" },
-  { code: "zh", name: "中文", flag: "🇨🇳" },
-];
+import { useTranslation } from "react-i18next";
+import {
+  supportedLanguages,
+  getLanguageByCode,
+  saveLanguage,
+} from "@/lib/locale-utils";
 
 export function PreferencesMenu() {
   const { theme, setTheme } = useTheme();
-  const [language, setLanguage] = useState("en");
   const [mounted, setMounted] = useState(false);
+  const { t, i18n } = useTranslation();
+  const [language, setLanguage] = useState(i18n.language);
 
   // Avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
-    // Get saved language from localStorage if available
-    const savedLanguage = localStorage.getItem("language") || "en";
-    setLanguage(savedLanguage);
   }, []);
 
+  useEffect(() => {
+    setLanguage(i18n.language);
+  }, [i18n.language]);
+
   const handleLanguageChange = (value: string) => {
+    i18n.changeLanguage(value);
     setLanguage(value);
-    localStorage.setItem("language", value);
-    // In a real app, you would change the app's language here
+    saveLanguage(value);
   };
 
   // Get current language data
   const getCurrentLanguage = () => {
-    return languages.find((lang) => lang.code === language) || languages[0];
+    return getLanguageByCode(language);
   };
 
   if (!mounted) return null;
@@ -54,12 +51,12 @@ export function PreferencesMenu() {
     <>
       <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
         <Settings className="mr-3 h-4 w-4" />
-        Preferences
+        {t("Preferences")}
       </button>
-      <div className="pl-9 pr-3 space-y-2 mt-2 w-full">
+      <div className="pl-9 pr-3 space-y-4 mt-2 w-full">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium">Theme</span>
+            <span className="text-sm font-medium">{t("Theme")}</span>
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
@@ -99,19 +96,24 @@ export function PreferencesMenu() {
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium">Language</span>
-            <div className="w-[90px]">
+            <span className="text-sm font-medium">{t("Language")}</span>
+            <div className="w-20">
               <Select value={language} onValueChange={handleLanguageChange}>
-                <SelectTrigger className="h-7 text-xs w-fit">
+                <SelectTrigger className="h-7 text-xs w-full">
                   <SelectValue>
-                    <div className="flex items-center">
-                      <span>{getCurrentLanguage().flag}</span>
+                    <div className="flex items-center justify-center">
+                      <span className="text-base">
+                        {getCurrentLanguage().flag}
+                      </span>
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent align="end" className="min-w-[150px]">
+                <SelectContent
+                  align="end"
+                  className="min-w-[150px] max-h-[200px] overflow-y-auto"
+                >
                   <SelectGroup>
-                    {languages.map((lang) => (
+                    {supportedLanguages.map((lang) => (
                       <SelectItem
                         key={lang.code}
                         value={lang.code}

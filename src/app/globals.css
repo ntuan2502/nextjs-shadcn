@@ -139,3 +139,12 @@
 .sidebar-scrollable::-webkit-scrollbar-thumb {
   display: none;
 }
+/* Prevent layout shift during language loading */
+.i18n-loading {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.i18n-loaded {
+  opacity: 1;
+}
