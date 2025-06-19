@@ -20,7 +20,13 @@
       "phone": "Phone",
       "office": "Office",
       "page": "Page",
-      "total": "Total"
+      "total": "Total",
+      "account": "Account",
+      "logout": "Log out",
+      "amata": "Amata",
+      "theme": "Theme",
+      "languages": "Languages",
+      "preferences": "Preferences"
     },
     "message": {
       "showingProducts": "Showing {{from}} - {{to}} of {{total}} products",

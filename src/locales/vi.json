@@ -20,7 +20,13 @@
       "phone": "Số điện thoại",
       "office": "Văn phòng",
       "page": "Trang",
-      "total": "Tổng"
+      "total": "Tổng",
+      "account": "Tài khoản",
+      "logout": "Đăng xuất",
+      "amata": "Amata",
+      "theme": "Chủ đề",
+      "languages": "Ngôn ngữ",
+      "preferences": "Tùy chọn"
     },
     "message": {
       "showingProducts": "Hiển thị {{from}} - {{to}} trong tổng số {{total}} sản phẩm",

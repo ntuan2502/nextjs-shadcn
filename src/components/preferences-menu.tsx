@@ -51,12 +51,12 @@ export function PreferencesMenu() {
     <>
       <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
         <Settings className="mr-3 h-4 w-4" />
-        {t("Preferences")}
+        {t("ui.label.preferences")}
       </button>
       <div className="pl-9 pr-3 space-y-4 mt-2 w-full">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium">{t("Theme")}</span>
+            <span className="text-sm font-medium">{t("ui.label.theme")}</span>
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
@@ -96,7 +96,7 @@ export function PreferencesMenu() {
         </div>
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-2">
-            <span className="text-sm font-medium">{t("Language")}</span>
+            <span className="text-sm font-medium">{t("ui.label.languages")}</span>
             <div className="w-20">
               <Select value={language} onValueChange={handleLanguageChange}>
                 <SelectTrigger className="h-7 text-xs w-full">

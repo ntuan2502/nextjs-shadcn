@@ -8,10 +8,7 @@ import {
   Folder,
   ChevronDown,
   UserIcon,
-  BellIcon,
   ChevronsUpDown,
-  Crown,
-  CreditCard,
   LogOut,
   User,
 } from "lucide-react";
@@ -68,22 +65,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const data = {
     navMain: [
       {
-        title: "Dashboard",
+        title: t("ui.label.dashboard"),
         url: "#",
         icon: Home,
         items: [
           {
-            title: "Dashboard",
+            title: t("ui.label.dashboard"),
             url: ROUTES.ADMIN_DASHBOARD,
             icon: Folder,
           },
           {
-            title: "Settings",
+            title: t("ui.label.settings"),
             url: ROUTES.SETTINGS,
             icon: Settings,
           },
           {
-            title: "Users",
+            title: t("ui.label.users"),
             url: ROUTES.USERS,
             icon: User,
           },
@@ -109,6 +106,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       .toUpperCase();
   };
 
+  //Mobile
   const SheetMenuItems = () => (
     <div className="flex flex-col">
       {user && (
@@ -133,22 +131,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <div className="p-2 space-y-1">
         <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
-          <Crown className="mr-3 h-4 w-4" />
-          {t("Upgrade to Pro")}
+          <UserIcon className="mr-3 h-4 w-4" />
+          {t("ui.label.account")}
         </button>
         <Separator className="my-2" />
-        <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
-          <UserIcon className="mr-3 h-4 w-4" />
-          {t("Account")}
-        </button>
-        <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
-          <CreditCard className="mr-3 h-4 w-4" />
-          {t("Billing")}
-        </button>
-        <button className="flex items-center w-full px-3 py-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
-          <BellIcon className="mr-3 h-4 w-4" />
-          {t("Notifications")}
-        </button>
         <PreferencesMenu />
         <Separator className="my-2" />
         <button
@@ -156,7 +142,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           onClick={logout}
         >
           <LogOut className="mr-3 h-4 w-4" />
-          {t("Log out")}
+          {t("ui.label.logout")}
         </button>
       </div>
     </div>
@@ -185,22 +171,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       )}
       <div className="p-2 space-y-1">
         <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
-          <Crown className="mr-3 h-4 w-4" />
-          {t("Upgrade to Pro")}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="my-2" />
-        <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
           <UserIcon className="mr-3 h-4 w-4" />
-          {t("Account")}
+          {t("ui.label.account")}
         </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
-          <CreditCard className="mr-3 h-4 w-4" />
-          {t("Billing")}
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center px-3 py-2 cursor-pointer">
-          <BellIcon className="mr-3 h-4 w-4" />
-          {t("Notifications")}
-        </DropdownMenuItem>
+        <Separator className="my-2" />
         <PreferencesMenu />
         <DropdownMenuSeparator className="my-2" />
         <DropdownMenuItem
@@ -208,7 +182,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           onClick={logout}
         >
           <LogOut className="mr-3 h-4 w-4" />
-          {t("Log out")}
+          {t("ui.label.logout")}
         </DropdownMenuItem>
       </div>
     </>
@@ -224,7 +198,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <GalleryVerticalEnd className="size-4" />
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">{t("AMATA")}</span>
+                <span className="font-semibold">{t("ui.label.amata")}</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -306,11 +280,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SheetTrigger>
                 <SheetContent side="bottom" className="h-auto max-h-[70vh] p-0">
                   <SheetHeader className="sr-only">
-                    <SheetTitle>User Menu</SheetTitle>
-                    <SheetDescription>
-                      Access your account settings, billing information, and
-                      other user options.
-                    </SheetDescription>
+                    <SheetTitle></SheetTitle>
+                    <SheetDescription></SheetDescription>
                   </SheetHeader>
                   <SheetMenuItems />
                 </SheetContent>
