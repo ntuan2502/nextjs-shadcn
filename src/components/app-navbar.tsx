@@ -107,7 +107,7 @@ export default function AppNavbar({
         </MobileNav>
       </Navbar>
       {children}
-      <DummyContent />
+      {/* <DummyContent /> */}
     </div>
   );
 }

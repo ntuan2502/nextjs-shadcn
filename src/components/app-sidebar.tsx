@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import {
-  GalleryVerticalEnd,
   Home,
   ChevronDown,
   UserIcon,
@@ -57,6 +56,7 @@ import { useAuth } from "@/contexts/auth";
 import { ROUTES } from "@/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation();
@@ -236,12 +236,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg">
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <GalleryVerticalEnd className="size-4" />
-              </div>
-              <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">{t("ui.label.amata")}</span>
+            <SidebarMenuButton className="h-full">
+              <div className="relative w-full h-10">
+                <Image
+                  src="/logo/AMATAVN.svg"
+                  alt="Logo"
+                  fill
+                  priority
+                  style={{ objectFit: "contain" }}
+                />
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>

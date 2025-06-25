@@ -149,14 +149,8 @@ export default function AssetsComponent() {
 
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
   const filteredData = useMemo(() => {
-    if (!tabSelected) return assets;
-
+    const keyword = searchQuery.toLowerCase();
     return assets.filter((item) => {
-      const belongsToSelectedOffice =
-        item.assetTransactions?.[0]?.user?.office?.id === tabSelected;
-
-      const keyword = searchQuery.toLowerCase();
-
       const matchesSearch =
         item.internalCode?.toLowerCase().includes(keyword) ||
         item.serialNumber.toLowerCase().includes(keyword) ||
@@ -174,6 +168,10 @@ export default function AssetsComponent() {
         item.customProperties?.hardDrive?.toLowerCase().includes(keyword) ||
         item.customProperties?.macAddress?.toLowerCase().includes(keyword);
 
+      if (!tabSelected) return matchesSearch;
+
+      const belongsToSelectedOffice =
+        item.assetTransactions?.[0]?.user?.office?.id === tabSelected;
       return belongsToSelectedOffice && matchesSearch;
     });
   }, [searchQuery, assets, tabSelected]);
