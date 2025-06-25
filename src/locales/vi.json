@@ -88,7 +88,12 @@
       "selectToUser": "Chọn người nhận",
       "signature": "Chữ ký",
       "noSignature": "Không có chữ ký hoặc chữ ký chưa được xác nhận.",
-      "pageNotFoundDescription": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Có thể trang đã bị di chuyển, xóa hoặc bạn đã nhập sai URL."
+      "pageNotFoundDescription": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Có thể trang đã bị di chuyển, xóa hoặc bạn đã nhập sai URL.",
+      "welcome": "Chào mừng đến với ứng dụng ITAM!",
+      "login": "Đăng nhập",
+      "welcomeBack": "Chào mừng trở lại!",
+      "welcomeBackDescription": "Đăng nhập vào tài khoản của bạn để tiếp tục",
+      "continueWithMicrosoft": "Tiếp tục với Microsoft"
     },
     "message": {
       "showingProducts": "Hiển thị {{from}} - {{to}} trong tổng số {{total}} sản phẩm",

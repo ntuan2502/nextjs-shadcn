@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,17 +10,19 @@ import {
 import { MicrosoftIcon } from "@/components/icon/icon";
 import Link from "next/link";
 import { ENV } from "@/constants";
+import { useTranslation } from "react-i18next";
 
 export default function LoginComponent() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Welcome back
+            {t("ui.label.welcomeBack")}
           </CardTitle>
           <CardDescription className="text-center">
-            Sign in to your account to continue
+            {t("ui.label.welcomeBackDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -28,7 +30,7 @@ export default function LoginComponent() {
             <Link href={`${ENV.API_URL}/auth/microsoft`}>
               <Button variant="outline" className="w-full" type="button">
                 <MicrosoftIcon />
-                Continue with Microsoft
+                {t("ui.label.continueWithMicrosoft")}
               </Button>
             </Link>
           </div>

@@ -2,7 +2,6 @@
 import {
   Navbar,
   NavBody,
-  NavItems,
   MobileNav,
   NavbarButton,
   MobileNavHeader,
@@ -13,27 +12,28 @@ import { useState } from "react";
 import Logo from "./logo";
 import { ROUTES } from "@/constants";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function AppNavbar({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const navItems = [
-    {
-      name: "Features",
-      link: "#features",
-    },
-    {
-      name: "Pricing",
-      link: "#pricing",
-    },
-    {
-      name: "Contact",
-      link: "#contact",
-    },
-  ];
-
+  // const navItems = [
+  //   {
+  //     name: "Features",
+  //     link: "#features",
+  //   },
+  //   {
+  //     name: "Pricing",
+  //     link: "#pricing",
+  //   },
+  //   {
+  //     name: "Contact",
+  //     link: "#contact",
+  //   },
+  // ];
+  const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -42,22 +42,22 @@ export default function AppNavbar({
         {/* Desktop Navigation */}
         <NavBody>
           <Logo />
-          <NavItems items={navItems} />
+          {/* <NavItems items={navItems} /> */}
           <div className="flex items-center gap-4">
             <NavbarButton
               variant="secondary"
               href={ROUTES.AUTH_LOGIN}
               as={Link}
             >
-              Login
+              {t("ui.label.login")}
             </NavbarButton>
-            <NavbarButton
+            {/* <NavbarButton
               variant="primary"
               href={ROUTES.TEST}
               as={Link}
             >
               Test
-            </NavbarButton>
+            </NavbarButton> */}
           </div>
         </NavBody>
 
@@ -75,7 +75,7 @@ export default function AppNavbar({
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {navItems.map((item, idx) => (
+            {/* {navItems.map((item, idx) => (
               <a
                 key={`mobile-link-${idx}`}
                 href={item.link}
@@ -84,7 +84,7 @@ export default function AppNavbar({
               >
                 <span className="block">{item.name}</span>
               </a>
-            ))}
+            ))} */}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
                 onClick={() => setIsMobileMenuOpen(false)}

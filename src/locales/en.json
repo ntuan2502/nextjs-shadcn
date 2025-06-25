@@ -88,7 +88,12 @@
       "selectToUser": "Select To User",
       "signature": "Signature",
       "noSignature": "No signature or signature not confirmed.",
-      "pageNotFoundDescription": "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or you entered the wrong URL."
+      "pageNotFoundDescription": "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or you entered the wrong URL.",
+      "welcome": " Welcome to the ITAM App!",
+      "login": "Login",
+      "welcomeBack": "Welcome Back!",
+      "welcomeBackDescription": "Sign in to your account to continue",
+      "continueWithMicrosoft": "Continue with Microsoft"
     },
     "message": {
       "showingProducts": "Showing {{from}} - {{to}} of {{total}} products",
