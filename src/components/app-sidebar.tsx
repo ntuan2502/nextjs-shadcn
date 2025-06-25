@@ -4,13 +4,16 @@ import { useEffect, useState } from "react";
 import {
   GalleryVerticalEnd,
   Home,
-  Settings,
-  Folder,
   ChevronDown,
   UserIcon,
   ChevronsUpDown,
   LogOut,
-  User,
+  Users,
+  Building,
+  Building2,
+  Monitor,
+  Layers,
+  LayoutDashboard,
 } from "lucide-react";
 
 import {
@@ -72,18 +75,58 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: t("ui.label.dashboard"),
             url: ROUTES.ADMIN_DASHBOARD,
-            icon: Folder,
+            icon: LayoutDashboard,
           },
           {
-            title: t("ui.label.settings"),
-            url: ROUTES.SETTINGS,
-            icon: Settings,
+            title: t("ui.label.offices"),
+            url: ROUTES.OFFICES,
+            icon: Building,
+          },
+          {
+            title: t("ui.label.departments"),
+            url: ROUTES.DEPARTMENTS,
+            icon: Building2,
           },
           {
             title: t("ui.label.users"),
             url: ROUTES.USERS,
-            icon: User,
+            icon: Users,
           },
+          {
+            title: t("ui.label.deviceTypes"),
+            url: ROUTES.DEVICE_TYPES,
+            icon: Layers,
+          },
+          {
+            title: t("ui.label.deviceModels"),
+            url: ROUTES.DEVICE_MODELS,
+            icon: Monitor,
+          },
+          {
+            title: t("ui.label.assets"),
+            url: ROUTES.ASSETS,
+            icon: Monitor,
+          },
+          {
+            title: t("ui.label.assetTransactions"),
+            url: ROUTES.ASSET_TRANSACTIONS,
+            icon: Monitor,
+          },
+          {
+            title: t("ui.label.assetTransferBatches"),
+            url: ROUTES.ASSET_TRANSFER_BATCHES,
+            icon: Monitor,
+          },
+          // {
+          //   title: t("ui.label.settings"),
+          //   url: ROUTES.SETTINGS,
+          //   icon: Settings,
+          // },
+          // {
+          //   title: "Test",
+          //   url: "/admin/test",
+          //   icon: Settings,
+          // },
         ],
       },
     ],

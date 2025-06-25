@@ -29,8 +29,10 @@ import {
 import { User } from "@/types/data";
 import axiosInstance from "@/lib/axiosInstance";
 import { ENV, ROUTES } from "@/constants";
-import { handleAxiosError } from "@/lib/handleAxiosFeedback";
-import Loading from "@/components/loading";
+import {
+  handleAxiosError,
+  handleAxiosSuccess,
+} from "@/lib/handleAxiosFeedback";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
@@ -43,8 +45,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DeleteIcon, EditIcon, EyeIcon } from "@/components/icon/icon";
 import { useTranslation } from "react-i18next";
-
-const ITEMS_PER_PAGE = 8;
+import { ITEMS_PER_PAGE } from "@/constants/config";
+import Swal from "sweetalert2";
+import LoadingDot from "@/components/loading-dot";
 
 export default function UsersComponent() {
   const { t } = useTranslation();
@@ -57,7 +60,7 @@ export default function UsersComponent() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchUser = async () => {
+  const fetchUsers = async () => {
     try {
       const res = await axiosInstance.get(`${ENV.API_URL}/users`);
       setUsers(res.data.data.users);
@@ -69,7 +72,7 @@ export default function UsersComponent() {
   };
 
   useEffect(() => {
-    fetchUser();
+    fetchUsers();
   }, []);
 
   // ✅ Hàm update URL theo thứ tự: page -> search
@@ -118,16 +121,15 @@ export default function UsersComponent() {
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
   const filteredData = useMemo(() => {
     if (!searchQuery) return users;
+    const keyword = searchQuery.toLowerCase();
 
     return users.filter(
       (item) =>
-        item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.phone?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.office?.shortName
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        item.department?.name.toLowerCase().includes(searchQuery.toLowerCase())
+        item.name?.toLowerCase().includes(keyword) ||
+        item.email.toLowerCase().includes(keyword) ||
+        item.phone?.toLowerCase().includes(keyword) ||
+        item.office?.shortName.toLowerCase().includes(keyword) ||
+        item.department?.name.toLowerCase().includes(keyword)
     );
   }, [searchQuery, users]);
 
@@ -186,11 +188,39 @@ export default function UsersComponent() {
     return pages;
   };
 
-  const from = startIndex + 1;
-  const to = Math.min(endIndex, filteredData.length);
-  const total = filteredData.length;
+  const handleDelete = async (item: User) => {
+    const name = item.name;
+    Swal.fire({
+      title: t("ui.swal.title", { name }),
+      text: t("ui.swal.text"),
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: t("ui.swal.confirmButtonText"),
+      cancelButtonText: t("ui.swal.cancelButtonText"),
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await axiosInstance.delete(
+            `${ENV.API_URL}/users/${item.id}`
+          );
+          handleAxiosSuccess(res);
+          setUsers((prev) => prev.filter((o) => o.id !== item.id));
 
-  if (isLoading) return <Loading />;
+          Swal.fire({
+            title: t("ui.swal.confirmed.title"),
+            text: t("ui.swal.confirmed.text", { name }),
+            icon: "success",
+          });
+        } catch (err) {
+          handleAxiosError(err);
+        }
+      }
+    });
+  };
+
+  if (isLoading) return <LoadingDot />;
 
   return (
     <SidebarInset>
@@ -214,8 +244,11 @@ export default function UsersComponent() {
       <div className="w-full mx-auto p-6 space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">
-              {t("ui.label.users")}
+            <CardTitle className="flex justify-between items-center text-2xl font-bold">
+              <p>{t("ui.label.users")}</p>
+              <Button>
+                <Link href={ROUTES.USER_ADD}>{t("ui.button.add")}</Link>
+              </Button>
             </CardTitle>
             <div className="flex items-center space-x-2">
               <div className="relative flex-1 max-w-md">
@@ -235,7 +268,11 @@ export default function UsersComponent() {
               </Button>
             </div>
             <div className="text-sm text-gray-600">
-              {t("ui.message.showingProducts", { from, to, total })}
+              {t("ui.message.showingProducts", {
+                from: startIndex + 1,
+                to: Math.min(endIndex, filteredData.length),
+                total: filteredData.length,
+              })}
             </div>
           </CardHeader>
           <CardContent>
@@ -243,28 +280,45 @@ export default function UsersComponent() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[200px]">
-                      {" "}
-                      {t("ui.label.name")}
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.name")}</p>
                     </TableHead>
-                    <TableHead>{t("ui.label.email")}</TableHead>
-                    <TableHead>{t("ui.label.phone")}</TableHead>
-                    <TableHead>{t("ui.label.office")}</TableHead>
-                    <TableHead>{t("ui.label.department")}</TableHead>
-                    <TableHead>{t("ui.label.actions")}</TableHead>
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.email")}</p>
+                    </TableHead>
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.phone")}</p>
+                    </TableHead>
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.office")}</p>
+                    </TableHead>
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.department")}</p>
+                    </TableHead>
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.actions")}</p>
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {currentData.length > 0 ? (
                     currentData.map((item) => (
                       <TableRow key={item.id}>
-                        <TableCell className="font-semibold">
-                          {item.name}
+                        <TableCell>
+                          <p>{item.name}</p>
                         </TableCell>
-                        <TableCell>{item.email}</TableCell>
-                        <TableCell>{item.phone}</TableCell>
-                        <TableCell>{item.office?.shortName}</TableCell>
-                        <TableCell>{item.department?.name}</TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.email}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.phone}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.office?.shortName}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.department?.name}</p>
+                        </TableCell>
                         <TableCell className="text-sm text-gray-600">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -281,13 +335,18 @@ export default function UsersComponent() {
                                     <EyeIcon />
                                   </DropdownMenuShortcut>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer">
-                                  {t("ui.button.edit")}
-                                  <DropdownMenuShortcut>
-                                    <EditIcon />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 focus:bg-red-50 dark:focus:bg-red-950/20 cursor-pointer">
+                                <Link href={ROUTES.USER_EDIT(item.id)}>
+                                  <DropdownMenuItem className="cursor-pointer">
+                                    {t("ui.button.edit")}
+                                    <DropdownMenuShortcut>
+                                      <EditIcon />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                </Link>
+                                <DropdownMenuItem
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 focus:bg-red-50 dark:focus:bg-red-950/20 cursor-pointer"
+                                  onClick={() => handleDelete(item)}
+                                >
                                   {t("ui.button.delete")}
                                   <DropdownMenuShortcut>
                                     <DeleteIcon />

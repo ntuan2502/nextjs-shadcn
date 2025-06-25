@@ -93,3 +93,61 @@ export const DeleteIcon = () => (
     />
   </svg>
 );
+
+export const FilePlusIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <g
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeWidth="1.5"
+    >
+      <path
+        strokeLinejoin="round"
+        d="M14.186 2.753v3.596c0 .487.194.955.54 1.3a1.85 1.85 0 0 0 1.306.539h4.125"
+      />
+      <path
+        strokeLinejoin="round"
+        d="M20.25 8.568v8.568a4.25 4.25 0 0 1-1.362 2.97a4.28 4.28 0 0 1-3.072 1.14h-7.59a4.3 4.3 0 0 1-3.1-1.124a4.26 4.26 0 0 1-1.376-2.986V6.862a4.25 4.25 0 0 1 1.362-2.97a4.28 4.28 0 0 1 3.072-1.14h5.714a3.5 3.5 0 0 1 2.361.905l2.96 2.722a2.97 2.97 0 0 1 1.031 2.189"
+      />
+      <path strokeMiterlimit="10" d="M11.57 10.424v7.116m-3.55-3.55h7.117" />
+    </g>
+  </svg>
+);
+
+export const ConfirmIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="2048"
+    height="2048"
+    viewBox="0 0 2048 2048"
+  >
+    <path
+      fill="currentColor"
+      d="m1344 998l147-147l90 90l-237 237l-173-173l90-90zm-832 538h512v128H512zm512-896H512V512h512zm0 512H512v-128h512zm557-723l-237 237l-173-173l90-90l83 83l147-147zm-426 1491l128 128H256V0h1536v1283l-128 128V128H384v1792zm874-467l-557 558l-269-270l90-90l179 178l467-466z"
+    />
+  </svg>
+);
+
+export const FileIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+  >
+    <path
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M13.324 8.436L9.495 12.19c-.364.36-.564.852-.556 1.369a2 2 0 0 0 .6 1.387c.375.371.88.584 1.403.593a1.92 1.92 0 0 0 1.386-.55l3.828-3.754a3.75 3.75 0 0 0 1.112-2.738a4 4 0 0 0-1.198-2.775a4.1 4.1 0 0 0-2.808-1.185a3.85 3.85 0 0 0-2.77 1.098L6.661 9.39a5.63 5.63 0 0 0-1.667 4.107a6 6 0 0 0 1.798 4.161a6.15 6.15 0 0 0 4.21 1.778a5.77 5.77 0 0 0 4.157-1.646l3.829-3.756"
+    />
+  </svg>
+);

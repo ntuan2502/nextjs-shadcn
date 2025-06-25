@@ -13,7 +13,6 @@ export default async function AdminLayout({
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar collapsible="icon" />
-      {/* <SidebarTrigger /> */}
       {children}
     </SidebarProvider>
   );

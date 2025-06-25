@@ -1,5 +1,5 @@
 "use client";
-import Loading from "@/components/loading";
+import LoadingDot from "@/components/loading-dot";
 import { useAuth } from "@/contexts/auth";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -18,8 +18,6 @@ export default function AuthCallback() {
   }, [searchParams, loginWithMicrosoft]);
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <Loading variant="dots" size="lg" />
-    </div>
+    <LoadingDot/>
   );
 }
