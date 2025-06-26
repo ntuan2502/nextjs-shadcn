@@ -22,8 +22,6 @@ import {
 } from "@/components/ui/table";
 import {
   Search,
-  ChevronLeft,
-  ChevronRight,
   MoreHorizontal,
   ChevronsUpDown,
   Check,
@@ -70,6 +68,7 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import LoadingDot from "@/components/loading-dot";
+import Pagination, { getPageNumbers } from "@/components/pagination";
 
 export default function AssetsComponent() {
   const { t } = useTranslation();
@@ -177,7 +176,8 @@ export default function AssetsComponent() {
   }, [searchQuery, assets, tabSelected]);
 
   // Tính toán phân trang
-  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
+  const length = filteredData.length;
+  const totalPages = Math.ceil(length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const currentData = filteredData.slice(startIndex, endIndex);
@@ -202,42 +202,6 @@ export default function AssetsComponent() {
       setCurrentPage(page);
       updateURL(tabSelected, searchQuery, page);
     }
-  };
-
-  // Tạo danh sách số trang
-  const getPageNumbers = () => {
-    const pages = [];
-    const maxVisiblePages = 5;
-
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      if (currentPage <= 3) {
-        for (let i = 1; i <= 4; i++) {
-          pages.push(i);
-        }
-        pages.push("...");
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1);
-        pages.push("...");
-        for (let i = totalPages - 3; i <= totalPages; i++) {
-          pages.push(i);
-        }
-      } else {
-        pages.push(1);
-        pages.push("...");
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pages.push(i);
-        }
-        pages.push("...");
-        pages.push(totalPages);
-      }
-    }
-
-    return pages;
   };
 
   const handleDelete = async (item: Asset) => {
@@ -370,12 +334,24 @@ export default function AssetsComponent() {
                 {t("ui.button.search")}
               </Button>
             </div>
-            <div className="text-sm text-gray-600">
-              {t("ui.message.showingProducts", {
-                from: startIndex + 1,
-                to: Math.min(endIndex, filteredData.length),
-                total: filteredData.length,
-              })}
+            <div className="flex justify-between text-sm text-gray-600">
+              <div>
+                {t("ui.message.showingResults", {
+                  from: startIndex + 1,
+                  to: Math.min(endIndex, filteredData.length),
+                  total: filteredData.length,
+                })}
+              </div>
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-blue-400 rounded-sm"></div>
+                  <div>{t("ui.label.endOfWarranty")}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 bg-red-400 rounded-sm"></div>
+                  <div>{t("ui.label.endOfLife")}</div>
+                </div>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -583,57 +559,13 @@ export default function AssetsComponent() {
               </Table>
             </div>
 
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between mt-6">
-                <div className="text-sm text-gray-600">
-                  {t("ui.label.page")} {currentPage} / {totalPages}
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => goToPage(currentPage - 1)}
-                    disabled={currentPage === 1}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    {t("ui.button.previous")}
-                  </Button>
-
-                  <div className="flex items-center space-x-1">
-                    {getPageNumbers().map((page, index) => (
-                      <div key={index}>
-                        {page === "..." ? (
-                          <span className="px-3 py-2 text-gray-400">...</span>
-                        ) : (
-                          <Button
-                            variant={
-                              currentPage === page ? "default" : "outline"
-                            }
-                            size="sm"
-                            onClick={() => goToPage(page as number)}
-                            className="min-w-[40px]"
-                          >
-                            {page}
-                          </Button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => goToPage(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                  >
-                    {t("ui.button.next")}
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            )}
+            <Pagination
+              t={t}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              goToPage={goToPage}
+              getPageNumbers={() => getPageNumbers({ totalPages, currentPage })}
+            />
           </CardContent>
         </Card>
       </div>

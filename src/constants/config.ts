@@ -1,4 +1,5 @@
 export const ITEMS_PER_PAGE = 8;
+export const MAX_VISIBLE_PAGES = 5;
 export const MALE = "MALE";
 export const FEMALE = "FEMALE";
 export const WARRANTY = [

@@ -96,7 +96,7 @@
       "continueWithMicrosoft": "Continue with Microsoft"
     },
     "message": {
-      "showingProducts": "Showing {{from}} - {{to}} of {{total}} products",
+      "showingResults": "Showing {{from}} - {{to}} of {{total}} results",
       "searchNoResults": "No results found for '{{searchQuery}}'",
       "pageNotFoundDescription": "Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or you entered the wrong URL.",
       "nameRequired": "Name is required.",

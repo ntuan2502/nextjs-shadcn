@@ -96,7 +96,7 @@
       "continueWithMicrosoft": "Tiếp tục với Microsoft"
     },
     "message": {
-      "showingProducts": "Hiển thị {{from}} - {{to}} trong tổng số {{total}} sản phẩm",
+      "showingResults": "Hiển thị {{from}} - {{to}} trong tổng số {{total}} kết quả",
       "searchNoResults": "Không tìm thấy kết quả cho '{{searchQuery}}'",
       "pageNotFoundDescription": "Xin lỗi, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Có thể trang đã bị di chuyển, xóa hoặc bạn đã nhập sai URL.",
       "nameRequired": "Tên là bắt buộc.",
