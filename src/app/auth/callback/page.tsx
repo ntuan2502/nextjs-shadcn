@@ -11,13 +11,9 @@ export default function AuthCallback() {
   useEffect(() => {
     const accessToken = searchParams.get("accessToken") || "";
     const refreshToken = searchParams.get("refreshToken") || "";
-    const id = searchParams.get("id") || "";
-    const email = searchParams.get("email") || "";
-    const name = searchParams.get("name") || "";
-    loginWithMicrosoft(accessToken, refreshToken, id, email, name);
+    const user = searchParams.get("user") || "";
+    loginWithMicrosoft(accessToken, refreshToken, user);
   }, [searchParams, loginWithMicrosoft]);
 
-  return (
-    <LoadingDot/>
-  );
+  return <LoadingDot />;
 }

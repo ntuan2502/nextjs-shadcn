@@ -69,16 +69,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     async (
       accessToken: string,
       refreshToken: string,
-      id: string,
-      email: string,
-      name: string
+      user: string
     ) => {
-      const user = { id, email, name };
+      const newUser = JSON.parse(user);
       Cookies.set("accessToken", accessToken, { path: "/", expires: 7 });
       Cookies.set("refreshToken", refreshToken, { path: "/", expires: 7 });
-      Cookies.set("user", JSON.stringify(user), { path: "/", expires: 7 });
+      Cookies.set("user", user, { path: "/", expires: 7 });
 
-      setUser(user);
+      setUser(newUser);
       router.push("/");
     },
     [setUser, router]

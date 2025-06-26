@@ -435,7 +435,22 @@ export default function AssetsComponent() {
                 <TableBody>
                   {currentData.length > 0 ? (
                     currentData.map((item) => (
-                      <TableRow key={item.id}>
+                      <TableRow
+                        key={item.id}
+                        className={
+                          dayjs(item.purchaseDate)
+                            .add(item.warranty || 3, "year")
+                            .format("YYYY-MM-DD") <=
+                          dayjs().format("YYYY-MM-DD")
+                            ? dayjs(item.purchaseDate)
+                                .add(5, "year")
+                                .format("YYYY-MM-DD") <=
+                              dayjs().format("YYYY-MM-DD")
+                              ? "bg-red-400"
+                              : "bg-blue-400"
+                            : ""
+                        }
+                      >
                         <TableCell>
                           <p>{item.internalCode}</p>
                         </TableCell>

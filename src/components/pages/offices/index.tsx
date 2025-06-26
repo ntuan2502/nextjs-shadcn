@@ -8,7 +8,14 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,6 +55,16 @@ import { useTranslation } from "react-i18next";
 import { ITEMS_PER_PAGE } from "@/constants/config";
 import Swal from "sweetalert2";
 import LoadingDot from "@/components/loading-dot";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { TFunction } from "i18next";
 
 export default function OfficesComponent() {
   const { t } = useTranslation();
@@ -59,6 +76,13 @@ export default function OfficesComponent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [offices, setOffices] = useState<Office[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedItem, setSelectedItem] = useState<Office>();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = (item: Office) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
 
   const fetchOffices = async () => {
     try {
@@ -241,6 +265,7 @@ export default function OfficesComponent() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+      <Modal open={open} setOpen={setOpen} t={t} selectedItem={selectedItem} />
       <div className="w-full mx-auto p-6 space-y-6">
         <Card>
           <CardHeader>
@@ -333,7 +358,10 @@ export default function OfficesComponent() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="start">
                               <DropdownMenuGroup>
-                                <DropdownMenuItem className="cursor-pointer">
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() => handleOpen(item)}
+                                >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
                                     <EyeIcon />
@@ -431,5 +459,52 @@ export default function OfficesComponent() {
         </Card>
       </div>
     </SidebarInset>
+  );
+}
+
+interface DataModelProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  t: TFunction<"translation", undefined>;
+  selectedItem?: Office;
+}
+
+function Modal({ open, setOpen, t, selectedItem }: DataModelProps) {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="sm:max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>{t("ui.label.office")}</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <>
+          <div>
+            <strong className="pr-1">{t("ui.label.name")}:</strong>
+            {selectedItem?.name}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.nameEn")}:</strong>
+            {selectedItem?.nameEn}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.shortName")}:</strong>
+            {selectedItem?.shortName}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.taxCode")}:</strong>
+            {selectedItem?.taxCode}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.address")}:</strong>
+            {selectedItem?.address}
+          </div>
+        </>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">{t("ui.button.close")}</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

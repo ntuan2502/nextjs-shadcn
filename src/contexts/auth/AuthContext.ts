@@ -7,9 +7,7 @@ export type AuthContextType = {
   loginWithMicrosoft: (
     accessToken: string,
     refreshToken: string,
-    id: string,
-    email: string,
-    name: string
+    user: string
   ) => Promise<void>;
   logout: () => Promise<void>;
   syncUser: () => Promise<void>;

@@ -8,7 +8,14 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import {
+  useState,
+  useMemo,
+  useEffect,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -48,6 +55,16 @@ import { useTranslation } from "react-i18next";
 import { ITEMS_PER_PAGE } from "@/constants/config";
 import Swal from "sweetalert2";
 import LoadingDot from "@/components/loading-dot";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { TFunction } from "i18next";
 
 export default function UsersComponent() {
   const { t } = useTranslation();
@@ -59,6 +76,13 @@ export default function UsersComponent() {
   const [currentPage, setCurrentPage] = useState(1);
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedItem, setSelectedItem] = useState<User>();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = (item: User) => {
+    setSelectedItem(item);
+    setOpen(true);
+  };
 
   const fetchUsers = async () => {
     try {
@@ -241,6 +265,7 @@ export default function UsersComponent() {
           </BreadcrumbList>
         </Breadcrumb>
       </header>
+      <Modal open={open} setOpen={setOpen} t={t} selectedItem={selectedItem} />
       <div className="w-full mx-auto p-6 space-y-6">
         <Card>
           <CardHeader>
@@ -329,7 +354,10 @@ export default function UsersComponent() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="start">
                               <DropdownMenuGroup>
-                                <DropdownMenuItem className="cursor-pointer">
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() => handleOpen(item)}
+                                >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
                                     <EyeIcon />
@@ -427,5 +455,52 @@ export default function UsersComponent() {
         </Card>
       </div>
     </SidebarInset>
+  );
+}
+
+interface DataModelProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  t: TFunction<"translation", undefined>;
+  selectedItem?: User;
+}
+
+function Modal({ open, setOpen, t, selectedItem }: DataModelProps) {
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="sm:max-w-3xl">
+        <DialogHeader>
+          <DialogTitle>{t("ui.label.user")}</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <>
+          <div>
+            <strong className="pr-1">{t("ui.label.name")}:</strong>
+            {selectedItem?.name}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.email")}:</strong>
+            {selectedItem?.email}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.phone")}:</strong>
+            {selectedItem?.phone}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.office")}:</strong>
+            {selectedItem?.office?.shortName}
+          </div>
+          <div>
+            <strong className="pr-1">{t("ui.label.department")}:</strong>
+            {selectedItem?.department?.name}
+          </div>
+        </>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">{t("ui.button.close")}</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
