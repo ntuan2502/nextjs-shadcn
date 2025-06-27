@@ -94,12 +94,12 @@
       "welcomeBack": "Chào mừng trở lại!",
       "welcomeBackDescription": "Đăng nhập vào tài khoản của bạn để tiếp tục",
       "continueWithMicrosoft": "Tiếp tục với Microsoft",
-      "suppliers": "Suppliers",
-      "supplier": "Supplier",
-      "internationalName": "International Name",
-      "autoFill": "Auto fill",
-      "asset": "Asset",
-      "transaction": "Transaction"
+      "suppliers": "Nhà cung cấp",
+      "supplier": "Nhà cung cấp",
+      "internationalName": "Tên quốc tế",
+      "autoFill": "Tự động điền",
+      "asset": "Tài sản",
+      "transaction": "Giao dịch"
     },
     "message": {
       "showingResults": "Hiển thị {{from}} - {{to}} trong tổng số {{total}} kết quả",
@@ -125,10 +125,10 @@
       "fromUserRequired": "Người chuyển là bắt buộc.",
       "toUserRequired": "Người nhận là bắt buộc.",
       "signatureRequired": "Chữ ký là bắt buộc.",
-      "internationalNameRequired": "International Name is required.",
-      "taxCodeNotFound": "Tax Code not found.",
-      "informationFound": "Information found: {{name}}",
-      "copied": "Copied {{label}} with value {{value}} to clipboard"
+      "internationalNameRequired": "Tên quốc tế là bắt buộc.",
+      "taxCodeNotFound": "Mã số thuế không tồn tại.",
+      "informationFound": "Tìm thấy thông tin: {{name}}",
+      "copied": "Sao chép {{label}} với giá trị {{value}} vào bộ nhớ tạm"
     },
     "placeholder": {
       "search": "Tìm kiếm..."
