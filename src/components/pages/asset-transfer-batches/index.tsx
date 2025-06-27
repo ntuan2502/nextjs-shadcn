@@ -31,6 +31,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -42,6 +43,7 @@ import dayjs from "dayjs";
 import { TransactionDirection, TransactionStatus } from "@/types/enum";
 import Pagination, { getPageNumbers } from "@/components/pagination";
 import SearchComponent from "@/components/search";
+import GenericModal from "@/components/modal";
 
 export default function AssetTransferBatchesComponent() {
   const { t } = useTranslation();
@@ -55,6 +57,13 @@ export default function AssetTransferBatchesComponent() {
     AssetTransferBatch[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedItem, setSelectedItem] = useState<AssetTransferBatch>();
+  const [openGenericModal, setOpenGenericModal] = useState(false);
+
+  const handleOpenGenericModal = (item: AssetTransferBatch) => {
+    setSelectedItem(item);
+    setOpenGenericModal(true);
+  };
 
   const fetchAssetTransferBatches = async () => {
     try {
@@ -242,12 +251,16 @@ export default function AssetTransferBatchesComponent() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="start">
                               <DropdownMenuGroup>
-                                <DropdownMenuItem className="cursor-pointer">
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() => handleOpenGenericModal(item)}
+                                >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
                                     <EyeIcon />
                                   </DropdownMenuShortcut>
                                 </DropdownMenuItem>
+                                <DropdownMenuSeparator />
                                 {item.assetTransactions.some(
                                   (tx) => tx.status === "PENDING"
                                 ) && (
@@ -307,6 +320,27 @@ export default function AssetTransferBatchesComponent() {
           </CardContent>
         </Card>
       </div>
+      <GenericModal
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
+        t={t}
+        title={t("ui.label.department")}
+        fields={[
+          { label: t("ui.label.id"), value: selectedItem?.id },
+          {
+            label: t("ui.label.data"),
+            value: selectedItem?.assetTransactions
+              .filter(
+                (tx) =>
+                  tx.status === TransactionStatus.COMPLETED &&
+                  tx.direction === TransactionDirection.INCOMING
+              )
+              .map((tx) => tx.asset?.internalCode ?? "")
+              .join(", "),
+          },
+          { label: t("ui.label.note"), value: selectedItem?.note },
+        ]}
+      />
     </SidebarInset>
   );
 }

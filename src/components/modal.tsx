@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Dispatch, SetStateAction, ReactNode } from "react";
 import { TFunction } from "i18next";
+import { toast } from "react-toastify";
 
 interface Field {
   label: string;
@@ -43,7 +44,22 @@ export default function GenericModal({
           {fields.map((field, index) => (
             <div key={index}>
               <strong className="pr-1">{field.label}:</strong>
-              {field.value || "-"}
+              <span
+                className="cursor-pointer"
+                onClick={() => {
+                  if (field.value) {
+                    navigator.clipboard.writeText(String(field.value));
+                    toast.info(
+                      t("ui.message.copied", {
+                        label: field.label,
+                        value: field.value,
+                      })
+                    );
+                  }
+                }}
+              >
+                {field.value || ""}
+              </span>
             </div>
           ))}
         </div>

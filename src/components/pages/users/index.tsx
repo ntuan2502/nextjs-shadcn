@@ -58,11 +58,11 @@ export default function UsersComponent() {
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<User>();
-  const [open, setOpen] = useState(false);
+  const [openGenericModal, setOpenGenericModal] = useState(false);
 
-  const handleOpen = (item: User) => {
+  const handleOpenGenericModal = (item: User) => {
     setSelectedItem(item);
-    setOpen(true);
+    setOpenGenericModal(true);
   };
 
   const fetchUsers = async () => {
@@ -287,7 +287,7 @@ export default function UsersComponent() {
                               <DropdownMenuGroup>
                                 <DropdownMenuItem
                                   className="cursor-pointer"
-                                  onClick={() => handleOpen(item)}
+                                  onClick={() => handleOpenGenericModal(item)}
                                 >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
@@ -343,8 +343,8 @@ export default function UsersComponent() {
       </div>
 
       <GenericModal
-        open={open}
-        setOpen={setOpen}
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
         t={t}
         title={t("ui.label.user")}
         fields={[

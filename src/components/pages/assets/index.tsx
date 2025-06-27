@@ -9,23 +9,18 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
+  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Search,
-  MoreHorizontal,
-  ChevronsUpDown,
-  Check,
-} from "lucide-react";
+import { MoreHorizontal, ChevronsUpDown, Check } from "lucide-react";
 import { Asset, Office } from "@/types/data";
 import axiosInstance from "@/lib/axiosInstance";
 import { ENV, ROUTES } from "@/constants";
@@ -40,6 +35,7 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -69,6 +65,17 @@ import {
 import { cn } from "@/lib/utils";
 import LoadingDot from "@/components/loading-dot";
 import Pagination, { getPageNumbers } from "@/components/pagination";
+import GenericModal from "@/components/modal";
+import SearchComponent from "@/components/search";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogClose,
+} from "@/components/ui/dialog";
 
 export default function AssetsComponent() {
   const { t } = useTranslation();
@@ -83,6 +90,19 @@ export default function AssetsComponent() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [open, setOpen] = useState(false);
   const [tabSelected, setTabSelected] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<Asset>();
+  const [openGenericModal, setOpenGenericModal] = useState(false);
+  const [openTransactionModal, setOpenTransactionModal] = useState(false);
+
+  const handleOpenGenericModal = (item: Asset) => {
+    setSelectedItem(item);
+    setOpenGenericModal(true);
+  };
+
+  const handleOpenTransactionModal = (item: Asset) => {
+    setSelectedItem(item);
+    setOpenTransactionModal(true);
+  };
 
   const fetchOffices = async () => {
     try {
@@ -317,31 +337,16 @@ export default function AssetsComponent() {
                 <Link href={ROUTES.ASSET_ADD}>{t("ui.button.add")}</Link>
               </Button>
             </CardTitle>
-            <div className="flex items-center space-x-2">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder={t("ui.placeholder.search")}
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="pl-10"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSearch();
-                  }}
-                />
-              </div>
-              <Button variant="outline" onClick={handleSearch}>
-                {t("ui.button.search")}
-              </Button>
-            </div>
-            <div className="flex justify-between text-sm text-gray-600">
-              <div>
-                {t("ui.message.showingResults", {
-                  from: startIndex + 1,
-                  to: Math.min(endIndex, filteredData.length),
-                  total: filteredData.length,
-                })}
-              </div>
+            <SearchComponent
+              t={t}
+              searchInput={searchInput}
+              setSearchInput={setSearchInput}
+              length={length}
+              startIndex={startIndex}
+              endIndex={endIndex}
+              handleSearch={handleSearch}
+            />
+            <div className="flex justify-end text-sm text-gray-600">
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-blue-400 rounded-sm"></div>
@@ -443,10 +448,7 @@ export default function AssetsComponent() {
                         </TableCell>
                         <TableCell>
                           <p className="text-wrap">
-                            {
-                              item.assetTransactions?.[0]?.user?.department
-                                ?.name
-                            }
+                            {item.assetTransactions?.[0]?.department?.name}
                           </p>
                         </TableCell>
                         <TableCell>
@@ -506,17 +508,10 @@ export default function AssetsComponent() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="start">
                               <DropdownMenuGroup>
-                                <Link
-                                  href={ROUTES.ASSET_CREATE_REQUEST(item.id)}
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() => handleOpenGenericModal(item)}
                                 >
-                                  <DropdownMenuItem className="cursor-pointer">
-                                    {t("ui.button.createRequest")}
-                                    <DropdownMenuShortcut>
-                                      <FilePlusIcon />
-                                    </DropdownMenuShortcut>
-                                  </DropdownMenuItem>
-                                </Link>
-                                <DropdownMenuItem className="cursor-pointer">
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
                                     <EyeIcon />
@@ -537,6 +532,28 @@ export default function AssetsComponent() {
                                   {t("ui.button.delete")}
                                   <DropdownMenuShortcut>
                                     <DeleteIcon />
+                                  </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <Link
+                                  href={ROUTES.ASSET_CREATE_REQUEST(item.id)}
+                                >
+                                  <DropdownMenuItem className="cursor-pointer">
+                                    {t("ui.button.createRequest")}
+                                    <DropdownMenuShortcut>
+                                      <FilePlusIcon />
+                                    </DropdownMenuShortcut>
+                                  </DropdownMenuItem>
+                                </Link>
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() =>
+                                    handleOpenTransactionModal(item)
+                                  }
+                                >
+                                  {t("ui.label.transaction")}
+                                  <DropdownMenuShortcut>
+                                    <EyeIcon />
                                   </DropdownMenuShortcut>
                                 </DropdownMenuItem>
                               </DropdownMenuGroup>
@@ -569,6 +586,139 @@ export default function AssetsComponent() {
           </CardContent>
         </Card>
       </div>
+      <GenericModal
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
+        t={t}
+        title={t("ui.label.asset")}
+        fields={[
+          {
+            label: t("ui.label.internalCode"),
+            value: selectedItem?.internalCode,
+          },
+          {
+            label: t("ui.label.deviceModel"),
+            value: selectedItem?.deviceModel?.name,
+          },
+          {
+            label: t("ui.label.deviceType"),
+            value: selectedItem?.deviceType?.name,
+          },
+          {
+            label: t("ui.label.serialNumber"),
+            value: selectedItem?.serialNumber,
+          },
+          {
+            label: t("ui.label.internalCode"),
+            value: selectedItem?.internalCode,
+          },
+          {
+            label: t("ui.label.user"),
+            value: selectedItem?.assetTransactions?.[0]?.user?.name,
+          },
+          {
+            label: t("ui.label.office"),
+            value: selectedItem?.assetTransactions?.[0]?.office?.shortName,
+          },
+          {
+            label: t("ui.label.department"),
+            value: selectedItem?.assetTransactions?.[0]?.department?.name,
+          },
+          {
+            label: t("ui.label.cpu"),
+            value: selectedItem?.customProperties?.cpu,
+          },
+          {
+            label: t("ui.label.ram"),
+            value: selectedItem?.customProperties?.ram,
+          },
+          {
+            label: t("ui.label.hardDrive"),
+            value: selectedItem?.customProperties?.hardDrive,
+          },
+          {
+            label: t("ui.label.osType"),
+            value: selectedItem?.customProperties?.osType,
+          },
+          {
+            label: t("ui.label.transactionType"),
+            value: selectedItem?.assetTransactions?.[0]?.type,
+          },
+          {
+            label: t("ui.label.purchaseDate"),
+            value: dayjs(selectedItem?.purchaseDate).format("YYYY-MM-DD"),
+          },
+          {
+            label: t("ui.label.warranty"),
+            value: selectedItem?.warranty,
+          },
+          {
+            label: t("ui.label.endOfWarranty"),
+            value: dayjs(selectedItem?.purchaseDate)
+              .add(selectedItem?.warranty || 3, "year")
+              .format("YYYY-MM-DD"),
+          },
+          {
+            label: t("ui.label.endOfLife"),
+            value: dayjs(selectedItem?.purchaseDate)
+              .add(selectedItem?.warranty || 5, "year")
+              .format("YYYY-MM-DD"),
+          },
+        ]}
+      />
+      <Dialog
+        open={openTransactionModal}
+        onOpenChange={setOpenTransactionModal}
+      >
+        <DialogContent className="sm:max-w-fit">
+          <DialogHeader>
+            <DialogTitle>{t("ui.label.transaction")}</DialogTitle>
+            <DialogDescription />
+          </DialogHeader>
+
+          <div className="space-y-2">
+            <Table>
+              <TableCaption>
+                {selectedItem?.internalCode} - {selectedItem?.deviceModel?.name}
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("ui.label.office")}</TableHead>
+                  <TableHead>{t("ui.label.department")}</TableHead>
+                  <TableHead>{t("ui.label.user")}</TableHead>
+                  <TableHead>{t("ui.label.direction")}</TableHead>
+                  <TableHead>{t("ui.label.type")}</TableHead>
+                  <TableHead>{t("ui.label.status")}</TableHead>
+                  <TableHead>{t("ui.label.signedAt")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {selectedItem?.assetTransactions?.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell>{item.office?.shortName}</TableCell>
+                    <TableCell>{item.department?.name}</TableCell>
+                    <TableCell>{item.user?.name}</TableCell>
+                    <TableCell>{item.direction}</TableCell>
+                    <TableCell>{item.type}</TableCell>
+                    <TableCell>{item.status}</TableCell>
+                    <TableCell>
+                      {item?.signedAt
+                        ? dayjs(item?.signedAt).format("HH:mm:ss YYYY-MM-DD")
+                        : ""}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">{t("ui.button.close")}</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </SidebarInset>
   );
 }

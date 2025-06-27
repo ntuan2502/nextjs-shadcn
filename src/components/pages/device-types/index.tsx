@@ -58,11 +58,11 @@ export default function DeviceTypesComponent() {
   const [deviceTypes, setDeviceTypes] = useState<DeviceType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<DeviceType>();
-  const [open, setOpen] = useState(false);
+  const [openGenericModal, setOpenGenericModal] = useState(false);
 
-  const handleOpen = (item: DeviceType) => {
+  const handleOpenGenericModal = (item: DeviceType) => {
     setSelectedItem(item);
-    setOpen(true);
+    setOpenGenericModal(true);
   };
 
   const fetchDeviceTypes = async () => {
@@ -258,7 +258,7 @@ export default function DeviceTypesComponent() {
                               <DropdownMenuGroup>
                                 <DropdownMenuItem
                                   className="cursor-pointer"
-                                  onClick={() => handleOpen(item)}
+                                  onClick={() => handleOpenGenericModal(item)}
                                 >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
@@ -314,8 +314,8 @@ export default function DeviceTypesComponent() {
       </div>
 
       <GenericModal
-        open={open}
-        setOpen={setOpen}
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
         t={t}
         title={t("ui.label.deviceType")}
         fields={[{ label: t("ui.label.name"), value: selectedItem?.name }]}

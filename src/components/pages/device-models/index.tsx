@@ -58,11 +58,11 @@ export default function DeviceModelsComponent() {
   const [deviceModels, setDeviceModels] = useState<DeviceModel[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<DeviceModel>();
-  const [open, setOpen] = useState(false);
+  const [openGenericModal, setOpenGenericModal] = useState(false);
 
-  const handleOpen = (item: DeviceModel) => {
+  const handleOpenGenericModal = (item: DeviceModel) => {
     setSelectedItem(item);
-    setOpen(true);
+    setOpenGenericModal(true);
   };
 
   const fetchDeviceModels = async () => {
@@ -258,7 +258,7 @@ export default function DeviceModelsComponent() {
                               <DropdownMenuGroup>
                                 <DropdownMenuItem
                                   className="cursor-pointer"
-                                  onClick={() => handleOpen(item)}
+                                  onClick={() => handleOpenGenericModal(item)}
                                 >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
@@ -313,8 +313,8 @@ export default function DeviceModelsComponent() {
         </Card>
       </div>
       <GenericModal
-        open={open}
-        setOpen={setOpen}
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
         t={t}
         title={t("ui.label.deviceModel")}
         fields={[{ label: t("ui.label.name"), value: selectedItem?.name }]}

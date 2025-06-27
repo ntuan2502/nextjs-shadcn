@@ -93,7 +93,13 @@
       "login": "Đăng nhập",
       "welcomeBack": "Chào mừng trở lại!",
       "welcomeBackDescription": "Đăng nhập vào tài khoản của bạn để tiếp tục",
-      "continueWithMicrosoft": "Tiếp tục với Microsoft"
+      "continueWithMicrosoft": "Tiếp tục với Microsoft",
+      "suppliers": "Suppliers",
+      "supplier": "Supplier",
+      "internationalName": "International Name",
+      "autoFill": "Auto fill",
+      "asset": "Asset",
+      "transaction": "Transaction"
     },
     "message": {
       "showingResults": "Hiển thị {{from}} - {{to}} trong tổng số {{total}} kết quả",
@@ -118,7 +124,11 @@
       "warrantyRequired": "Bảo hành là bắt buộc.",
       "fromUserRequired": "Người chuyển là bắt buộc.",
       "toUserRequired": "Người nhận là bắt buộc.",
-      "signatureRequired": "Chữ ký là bắt buộc."
+      "signatureRequired": "Chữ ký là bắt buộc.",
+      "internationalNameRequired": "International Name is required.",
+      "taxCodeNotFound": "Tax Code not found.",
+      "informationFound": "Information found: {{name}}",
+      "copied": "Copied {{label}} with value {{value}} to clipboard"
     },
     "placeholder": {
       "search": "Tìm kiếm..."

@@ -41,6 +41,7 @@ import LoadingDot from "@/components/loading-dot";
 import dayjs from "dayjs";
 import Pagination, { getPageNumbers } from "@/components/pagination";
 import SearchComponent from "@/components/search";
+import GenericModal from "@/components/modal";
 
 export default function AssetTransactionsComponent() {
   const { t } = useTranslation();
@@ -54,6 +55,13 @@ export default function AssetTransactionsComponent() {
     AssetTransaction[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [selectedItem, setSelectedItem] = useState<AssetTransaction>();
+  const [openGenericModal, setOpenGenericModal] = useState(false);
+
+  const handleOpenGenericModal = (item: AssetTransaction) => {
+    setSelectedItem(item);
+    setOpenGenericModal(true);
+  };
 
   const fetchAssetTransactions = async () => {
     try {
@@ -150,38 +158,6 @@ export default function AssetTransactionsComponent() {
     setCurrentPage(page);
     updateURL(searchQuery, page);
   };
-
-  // const handleDelete = async (item: AssetTransaction) => {
-  //   const name = item.asset?.internalCode;
-  //   Swal.fire({
-  //     title: t("ui.swal.title", { name }),
-  //     text: t("ui.swal.text"),
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: t("ui.swal.confirmButtonText"),
-  //     cancelButtonText: t("ui.swal.cancelButtonText"),
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       try {
-  //         const res = await axiosInstance.delete(
-  //           `${ENV.API_URL}/asset-transactions/${item.id}`
-  //         );
-  //         handleAxiosSuccess(res);
-  //         setAssetTransactions((prev) => prev.filter((o) => o.id !== item.id));
-
-  //         Swal.fire({
-  //           title: t("ui.swal.confirmed.title"),
-  //           text: t("ui.swal.confirmed.text", { name }),
-  //           icon: "success",
-  //         });
-  //       } catch (err) {
-  //         handleAxiosError(err);
-  //       }
-  //     }
-  //   });
-  // };
 
   if (isLoading) return <LoadingDot />;
 
@@ -302,7 +278,7 @@ export default function AssetTransactionsComponent() {
                               ? dayjs(item.signedAt).format(
                                   "HH:mm:ss YYYY-MM-DD"
                                 )
-                              : "-"}
+                              : ""}
                           </p>
                         </TableCell>
                         <TableCell className="text-sm text-gray-600">
@@ -315,29 +291,15 @@ export default function AssetTransactionsComponent() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56" align="start">
                               <DropdownMenuGroup>
-                                <DropdownMenuItem className="cursor-pointer">
+                                <DropdownMenuItem
+                                  className="cursor-pointer"
+                                  onClick={() => handleOpenGenericModal(item)}
+                                >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
                                     <EyeIcon />
                                   </DropdownMenuShortcut>
                                 </DropdownMenuItem>
-                                {/* <Link href={ROUTES.ASSET_TRANSACTIONS_EDIT(item.id)}>
-                                  <DropdownMenuItem className="cursor-pointer">
-                                    {t("ui.button.edit")}
-                                    <DropdownMenuShortcut>
-                                      <EditIcon />
-                                    </DropdownMenuShortcut>
-                                  </DropdownMenuItem>
-                                </Link>
-                                <DropdownMenuItem
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950/20 focus:bg-red-50 dark:focus:bg-red-950/20 cursor-pointer"
-                                  onClick={() => handleDelete(item)}
-                                >
-                                  {t("ui.button.delete")}
-                                  <DropdownMenuShortcut>
-                                    <DeleteIcon />
-                                  </DropdownMenuShortcut>
-                                </DropdownMenuItem> */}
                               </DropdownMenuGroup>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -368,6 +330,48 @@ export default function AssetTransactionsComponent() {
           </CardContent>
         </Card>
       </div>
+      <GenericModal
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
+        t={t}
+        title={t("ui.label.asset")}
+        fields={[
+          {
+            label: t("ui.label.internalCode"),
+            value: selectedItem?.asset?.internalCode,
+          },
+          {
+            label: t("ui.label.office"),
+            value: selectedItem?.office?.shortName,
+          },
+          {
+            label: t("ui.label.department"),
+            value: selectedItem?.department?.name,
+          },
+          {
+            label: t("ui.label.user"),
+            value: selectedItem?.user?.name,
+          },
+          {
+            label: t("ui.label.direction"),
+            value: selectedItem?.direction,
+          },
+          {
+            label: t("ui.label.type"),
+            value: selectedItem?.type,
+          },
+          {
+            label: t("ui.label.status"),
+            value: selectedItem?.status,
+          },
+          {
+            label: t("ui.label.signedAt"),
+            value: selectedItem?.signedAt
+              ? dayjs(selectedItem?.signedAt).format("HH:mm:ss YYYY-MM-DD")
+              : "",
+          },
+        ]}
+      />
     </SidebarInset>
   );
 }

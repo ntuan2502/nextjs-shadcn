@@ -1,3 +1,4 @@
+import { Supplier } from "./../components/icon/icon";
 import { ButtonProps } from "@heroui/react";
 import {
   Gender,
@@ -112,4 +113,14 @@ export type CircleChartProps = {
   color: ButtonProps["color"];
   chartData: ChartData[];
   total: number;
+};
+
+export type Supplier = {
+  id: string;
+  name: string;
+  internationalName?: string;
+  shortName?: string;
+  address?: string;
+  taxCode: string;
+  phone?: string;
 };

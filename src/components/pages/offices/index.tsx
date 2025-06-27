@@ -58,11 +58,11 @@ export default function OfficesComponent() {
   const [offices, setOffices] = useState<Office[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<Office>();
-  const [open, setOpen] = useState(false);
+  const [openGenericModal, setOpenGenericModal] = useState(false);
 
-  const handleOpen = (item: Office) => {
+  const handleOpenGenericModal = (item: Office) => {
     setSelectedItem(item);
-    setOpen(true);
+    setOpenGenericModal(true);
   };
 
   const fetchOffices = async () => {
@@ -291,7 +291,7 @@ export default function OfficesComponent() {
                               <DropdownMenuGroup>
                                 <DropdownMenuItem
                                   className="cursor-pointer"
-                                  onClick={() => handleOpen(item)}
+                                  onClick={() => handleOpenGenericModal(item)}
                                 >
                                   {t("ui.button.view")}
                                   <DropdownMenuShortcut>
@@ -346,8 +346,8 @@ export default function OfficesComponent() {
         </Card>
       </div>
       <GenericModal
-        open={open}
-        setOpen={setOpen}
+        open={openGenericModal}
+        setOpen={setOpenGenericModal}
         t={t}
         title={t("ui.label.office")}
         fields={[

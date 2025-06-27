@@ -27,4 +27,7 @@ export const ROUTES = {
   ASSET_TRANSFER_BATCHES: "/admin/asset-transfer-batches",
   ASSET_TRANSFER_BATCH_CONFIRM: (id: string) =>
     `/asset-transfer-batches/confirm/${id}?type=TRANSFER`,
+  SUPPLIERS: "/admin/suppliers",
+  SUPPLIER_ADD: "/admin/suppliers/add",
+  SUPPLIER_EDIT: (id: string) => `/admin/suppliers/edit/${id}`,
 };

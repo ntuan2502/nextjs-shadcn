@@ -93,7 +93,13 @@
       "login": "Login",
       "welcomeBack": "Welcome Back!",
       "welcomeBackDescription": "Sign in to your account to continue",
-      "continueWithMicrosoft": "Continue with Microsoft"
+      "continueWithMicrosoft": "Continue with Microsoft",
+      "suppliers": "Suppliers",
+      "supplier": "Supplier",
+      "internationalName": "International Name",
+      "autoFill": "Auto fill",
+      "asset": "Asset",
+      "transaction": "Transaction"
     },
     "message": {
       "showingResults": "Showing {{from}} - {{to}} of {{total}} results",
@@ -118,7 +124,11 @@
       "warrantyRequired": "Warranty is required.",
       "fromUserRequired": "From User is required.",
       "toUserRequired": "To User is required.",
-      "signatureRequired": "Signature is required."
+      "signatureRequired": "Signature is required.",
+      "internationalNameRequired": "International Name is required.",
+      "taxCodeNotFound": "Tax Code not found.",
+      "informationFound": "Information found: {{name}}",
+      "copied": "Copied {{label}} with value {{value}} to clipboard"
     },
     "placeholder": {
       "search": "Search..."

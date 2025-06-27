@@ -57,6 +57,12 @@ import { ENV, ROUTES } from "@/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import {
+  AssetIcon,
+  BatchIcon,
+  SupplierIcon,
+  TransactionIcon,
+} from "./icon/icon";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { t } = useTranslation();
@@ -105,17 +111,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           {
             title: t("ui.label.assets"),
             url: ROUTES.ASSETS,
-            icon: Monitor,
+            icon: AssetIcon,
           },
           {
             title: t("ui.label.assetTransactions"),
             url: ROUTES.ASSET_TRANSACTIONS,
-            icon: Monitor,
+            icon: TransactionIcon,
           },
           {
             title: t("ui.label.assetTransferBatches"),
             url: ROUTES.ASSET_TRANSFER_BATCHES,
-            icon: Monitor,
+            icon: BatchIcon,
+          },
+          {
+            title: t("ui.label.suppliers"),
+            url: ROUTES.SUPPLIERS,
+            icon: SupplierIcon,
           },
           // {
           //   title: t("ui.label.settings"),
@@ -306,7 +317,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <Avatar className="h-8 w-8 rounded-lg">
                         {user.avatar && (
                           <AvatarImage
-                            src={ENV.API_URL + user.avatar || "/placeholder.svg"}
+                            src={
+                              ENV.API_URL + user.avatar || "/placeholder.svg"
+                            }
                             alt={user.name}
                           />
                         )}
@@ -343,7 +356,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       <Avatar className="h-8 w-8 rounded-lg">
                         {user.avatar && (
                           <AvatarImage
-                            src={ENV.API_URL + user.avatar || "/placeholder.svg"}
+                            src={
+                              ENV.API_URL + user.avatar || "/placeholder.svg"
+                            }
                             alt={user.name}
                           />
                         )}

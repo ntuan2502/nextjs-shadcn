@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { MoreHorizontal } from "lucide-react";
-import { Department } from "@/types/data";
+import { Supplier } from "@/types/data";
 import axiosInstance from "@/lib/axiosInstance";
 import { ENV, ROUTES } from "@/constants";
 import {
@@ -39,15 +39,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DeleteIcon, EditIcon, EyeIcon } from "@/components/icon/icon";
 import { useTranslation } from "react-i18next";
-import Swal from "sweetalert2";
 import { ITEMS_PER_PAGE } from "@/constants/config";
+import Swal from "sweetalert2";
 import LoadingDot from "@/components/loading-dot";
 
 import Pagination, { getPageNumbers } from "@/components/pagination";
 import GenericModal from "@/components/modal";
 import SearchComponent from "@/components/search";
 
-export default function DepartmentsComponent() {
+export default function SuppliersComponent() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
@@ -55,20 +55,20 @@ export default function DepartmentsComponent() {
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [departments, setDepartments] = useState<Department[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [selectedItem, setSelectedItem] = useState<Department>();
+  const [selectedItem, setSelectedItem] = useState<Supplier>();
   const [openGenericModal, setOpenGenericModal] = useState(false);
 
-  const handleOpenGenericModal = (item: Department) => {
+  const handleOpenGenericModal = (item: Supplier) => {
     setSelectedItem(item);
     setOpenGenericModal(true);
   };
 
-  const fetchDepartments = async () => {
+  const fetchSuppliers = async () => {
     try {
-      const res = await axiosInstance.get(`${ENV.API_URL}/departments`);
-      setDepartments(res.data.data.departments);
+      const res = await axiosInstance.get(`${ENV.API_URL}/suppliers`);
+      setSuppliers(res.data.data.suppliers);
     } catch (err) {
       handleAxiosError(err);
     } finally {
@@ -77,7 +77,7 @@ export default function DepartmentsComponent() {
   };
 
   useEffect(() => {
-    fetchDepartments();
+    fetchSuppliers();
   }, []);
 
   // ✅ Hàm update URL theo thứ tự: page -> search
@@ -125,13 +125,17 @@ export default function DepartmentsComponent() {
 
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
   const filteredData = useMemo(() => {
-    if (!searchQuery) return departments;
+    if (!searchQuery) return suppliers;
     const keyword = searchQuery.toLowerCase();
 
-    return departments.filter((item) =>
-      item.name?.toLowerCase().includes(keyword)
+    return suppliers.filter(
+      (item) =>
+        item.name.toLowerCase().includes(keyword) ||
+        item.address?.toLowerCase().includes(keyword) ||
+        item.taxCode.toLowerCase().includes(keyword) ||
+        item.phone?.toLowerCase().includes(keyword)
     );
-  }, [searchQuery, departments]);
+  }, [searchQuery, suppliers]);
 
   // Tính toán phân trang
   const length = filteredData.length;
@@ -153,7 +157,7 @@ export default function DepartmentsComponent() {
     updateURL(searchQuery, page);
   };
 
-  const handleDelete = async (item: Department) => {
+  const handleDelete = async (item: Supplier) => {
     const name = item.name;
     Swal.fire({
       title: t("ui.swal.title", { name }),
@@ -168,10 +172,10 @@ export default function DepartmentsComponent() {
       if (result.isConfirmed) {
         try {
           const res = await axiosInstance.delete(
-            `${ENV.API_URL}/departments/${item.id}`
+            `${ENV.API_URL}/suppliers/${item.id}`
           );
           handleAxiosSuccess(res);
-          setDepartments((prev) => prev.filter((o) => o.id !== item.id));
+          setSuppliers((prev) => prev.filter((o) => o.id !== item.id));
 
           Swal.fire({
             title: t("ui.swal.confirmed.title"),
@@ -201,7 +205,7 @@ export default function DepartmentsComponent() {
             </BreadcrumbItem>
             <BreadcrumbSeparator className="hidden md:block" />
             <BreadcrumbItem>
-              <BreadcrumbPage>{t("ui.label.departments")}</BreadcrumbPage>
+              <BreadcrumbPage>{t("ui.label.suppliers")}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -211,9 +215,9 @@ export default function DepartmentsComponent() {
         <Card>
           <CardHeader>
             <CardTitle className="flex justify-between items-center text-2xl font-bold">
-              <p>{t("ui.label.departments")}</p>
+              <p>{t("ui.label.suppliers")}</p>
               <Button>
-                <Link href={ROUTES.DEPARTMENT_ADD}>{t("ui.button.add")}</Link>
+                <Link href={ROUTES.SUPPLIER_ADD}>{t("ui.button.add")}</Link>
               </Button>
             </CardTitle>
             <SearchComponent
@@ -235,6 +239,19 @@ export default function DepartmentsComponent() {
                       <p className="text-wrap min-w-40">{t("ui.label.name")}</p>
                     </TableHead>
                     <TableHead>
+                      <p className="text-wrap min-w-40">
+                        {t("ui.label.address")}
+                      </p>
+                    </TableHead>
+                    <TableHead>
+                      <p className="text-wrap">{t("ui.label.taxCode")}</p>
+                    </TableHead>
+                    <TableHead>
+                      <p className="text-wrap min-w-40">
+                        {t("ui.label.phone")}
+                      </p>
+                    </TableHead>
+                    <TableHead>
                       <p className="text-wrap">{t("ui.label.actions")}</p>
                     </TableHead>
                   </TableRow>
@@ -245,6 +262,15 @@ export default function DepartmentsComponent() {
                       <TableRow key={item.id}>
                         <TableCell>
                           <p className="text-wrap">{item.name}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.address}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.taxCode}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-wrap">{item.phone}</p>
                         </TableCell>
                         <TableCell className="text-sm text-gray-600">
                           <DropdownMenu>
@@ -265,7 +291,7 @@ export default function DepartmentsComponent() {
                                     <EyeIcon />
                                   </DropdownMenuShortcut>
                                 </DropdownMenuItem>
-                                <Link href={ROUTES.DEPARTMENT_EDIT(item.id)}>
+                                <Link href={ROUTES.SUPPLIER_EDIT(item.id)}>
                                   <DropdownMenuItem className="cursor-pointer">
                                     {t("ui.button.edit")}
                                     <DropdownMenuShortcut>
@@ -316,8 +342,18 @@ export default function DepartmentsComponent() {
         open={openGenericModal}
         setOpen={setOpenGenericModal}
         t={t}
-        title={t("ui.label.department")}
-        fields={[{ label: t("ui.label.name"), value: selectedItem?.name }]}
+        title={t("ui.label.supplier")}
+        fields={[
+          { label: t("ui.label.name"), value: selectedItem?.name },
+          {
+            label: t("ui.label.internationalName"),
+            value: selectedItem?.internationalName,
+          },
+          { label: t("ui.label.shortName"), value: selectedItem?.shortName },
+          { label: t("ui.label.address"), value: selectedItem?.address },
+          { label: t("ui.label.taxCode"), value: selectedItem?.taxCode },
+          { label: t("ui.label.phone"), value: selectedItem?.phone },
+        ]}
       />
     </SidebarInset>
   );
