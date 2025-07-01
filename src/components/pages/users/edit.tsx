@@ -137,8 +137,10 @@ export default function EditUserComponent({ id }: { id: string }) {
       const { dob, ...rest } = data;
       const date = new Date(dob);
       form.reset({
-        dob: date,
         ...rest,
+        dob: date,
+        officeId: rest.office?.id || null,
+        departmentId: rest.department?.id || null,
       });
       console.log(data);
     } catch (err) {

@@ -10,7 +10,7 @@ export function ReactSignature({
   label,
   ...props
 }: ComponentProps<typeof Signature> & {
-  onDownload?: (url: string) => void;
+  onDownload?: (url: string | null) => void;
   label: string;
 }) {
   const [readonly, setReadonly] = useState(false);
@@ -36,10 +36,6 @@ export function ReactSignature({
         ctx?.drawImage(img, 0, 0);
         const url = canvas.toDataURL("image/png");
         resolve(url);
-        // const a = document.createElement("a");
-        // a.download = "signature.png";
-        // a.href = canvas.toDataURL("image/png");
-        // a.click();
       };
 
       img.onerror = () => resolve(null);
@@ -50,12 +46,20 @@ export function ReactSignature({
     });
   }
 
-  const handleClear = () => $svg.current?.clear();
+  const handleClear = () => {
+    $svg.current?.clear();
+    if (onDownload) {
+      onDownload(null);
+    }
+  };
 
   const handleValidate = async () => {
     if (readonly) {
       $svg.current?.clear();
       setReadonly(false);
+      if (onDownload) {
+        onDownload(null);
+      }
     } else {
       setReadonly(true);
       if (onDownload && $svg.current?.svg) {
@@ -89,7 +93,7 @@ export function ReactSignature({
         {...props}
         ref={$svg}
       />
-      <div className="flex justify-end gap-1 text-neutral-700 dark:text-neutral-200">
+      <div className="flex gap-1 text-neutral-700 dark:text-neutral-200">
         <ValidateButton onClick={handleValidate} readonly={readonly} />
 
         {!readonly && <ClearButton onClick={handleClear} />}

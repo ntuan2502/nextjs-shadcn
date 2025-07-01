@@ -40,24 +40,24 @@ export default function AddSupplierComponent() {
     name: z.string().min(1, {
       message: t("ui.message.nameRequired"),
     }),
-    internationalName: z.string().optional(),
-    shortName: z.string().optional(),
+    internationalName: z.string().nullable(),
+    shortName: z.string().nullable(),
     address: z.string().min(1, {
       message: t("ui.message.addressRequired"),
     }),
     taxCode: z.string().min(1, { message: t("ui.message.taxCodeRequired") }),
-    phone: z.string().optional(),
+    phone: z.string().nullable(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
-      internationalName: "",
-      shortName: "",
+      internationalName: null,
+      shortName: null,
       address: "",
       taxCode: "",
-      phone: "",
+      phone: null,
     },
   });
 
@@ -87,16 +87,16 @@ export default function AddSupplierComponent() {
     form.setValue("name", data.name, {
       shouldValidate: true,
     });
-    form.setValue("internationalName", data.internationalName, {
+    form.setValue("internationalName", data.internationalName || null, {
       shouldValidate: true,
     });
-    form.setValue("shortName", data.shortName ?? "", {
+    form.setValue("shortName", data.shortName || null, {
       shouldValidate: true,
     });
     form.setValue("address", data.address, {
       shouldValidate: true,
     });
-    form.setValue("phone", data.phone ?? "", {
+    form.setValue("phone", data.phone || null, {
       shouldValidate: true,
     });
   };

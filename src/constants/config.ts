@@ -26,11 +26,11 @@ export const WARRANTY = [
 ];
 export const OS = [
   {
-    id: "WINDOWS 10",
-    name: "WINDOWS 10",
+    id: "Windows 10",
+    name: "Windows 10",
   },
   {
-    id: "WINDOWS 11",
-    name: "WINDOWS 11",
+    id: "Windows 11",
+    name: "Windows 11",
   },
 ];

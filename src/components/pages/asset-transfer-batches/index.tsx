@@ -40,7 +40,7 @@ import { useTranslation } from "react-i18next";
 import { ITEMS_PER_PAGE } from "@/constants/config";
 import LoadingDot from "@/components/loading-dot";
 import dayjs from "dayjs";
-import { TransactionDirection, TransactionStatus } from "@/types/enum";
+import { TransactionDirection } from "@/types/enum";
 import Pagination, { getPageNumbers } from "@/components/pagination";
 import SearchComponent from "@/components/search";
 import GenericModal from "@/components/modal";
@@ -230,7 +230,6 @@ export default function AssetTransferBatchesComponent() {
                             {item.assetTransactions
                               .filter(
                                 (tx) =>
-                                  tx.status === TransactionStatus.COMPLETED &&
                                   tx.direction === TransactionDirection.INCOMING
                               )
                               .map((tx) => tx.asset?.internalCode ?? "")
@@ -330,11 +329,7 @@ export default function AssetTransferBatchesComponent() {
           {
             label: t("ui.label.data"),
             value: selectedItem?.assetTransactions
-              .filter(
-                (tx) =>
-                  tx.status === TransactionStatus.COMPLETED &&
-                  tx.direction === TransactionDirection.INCOMING
-              )
+              .filter((tx) => tx.direction === TransactionDirection.INCOMING)
               .map((tx) => tx.asset?.internalCode ?? "")
               .join(", "),
           },

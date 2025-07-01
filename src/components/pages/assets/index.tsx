@@ -76,6 +76,7 @@ import {
   DialogDescription,
   DialogClose,
 } from "@/components/ui/dialog";
+import { TransactionDirection, TransactionStatus } from "@/types/enum";
 
 export default function AssetsComponent() {
   const { t } = useTranslation();
@@ -443,12 +444,24 @@ export default function AssetsComponent() {
                         </TableCell>
                         <TableCell>
                           <p className="text-wrap">
-                            {item.assetTransactions?.[0]?.user?.name}
+                            {
+                              item.assetTransactions?.find(
+                                (tx) =>
+                                  tx.status === TransactionStatus.COMPLETED &&
+                                  tx.direction === TransactionDirection.INCOMING
+                              )?.user?.name
+                            }
                           </p>
                         </TableCell>
                         <TableCell>
                           <p className="text-wrap">
-                            {item.assetTransactions?.[0]?.department?.name}
+                            {
+                              item.assetTransactions?.find(
+                                (tx) =>
+                                  tx.status === TransactionStatus.COMPLETED &&
+                                  tx.direction === TransactionDirection.INCOMING
+                              )?.department?.name
+                            }
                           </p>
                         </TableCell>
                         <TableCell>
@@ -661,7 +674,7 @@ export default function AssetsComponent() {
           {
             label: t("ui.label.endOfLife"),
             value: dayjs(selectedItem?.purchaseDate)
-              .add(selectedItem?.warranty || 5, "year")
+              .add(5, "year")
               .format("YYYY-MM-DD"),
           },
         ]}

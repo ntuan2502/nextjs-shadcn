@@ -47,7 +47,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
-import { DeviceType, DeviceModel } from "@/types/data";
+import { DeviceType, DeviceModel, Supplier } from "@/types/data";
 import { OS, WARRANTY } from "@/constants/config";
 
 export default function AddAssetComponent() {
@@ -56,6 +56,7 @@ export default function AddAssetComponent() {
 
   const [deviceModels, setDeviceModels] = useState<DeviceModel[]>([]);
   const [deviceTypes, setDeviceTypes] = useState<DeviceType[]>([]);
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
 
   const fetchDeviceModels = async () => {
     try {
@@ -79,9 +80,21 @@ export default function AddAssetComponent() {
     }
   };
 
+  const fetchSuppliers = async () => {
+    try {
+      const res = await axiosInstance.get(`${ENV.API_URL}/suppliers`);
+      const deviceTypes: Supplier[] = res.data.data.suppliers;
+
+      setSuppliers(deviceTypes);
+    } catch (err) {
+      handleAxiosError(err);
+    }
+  };
+
   useEffect(() => {
     fetchDeviceModels();
     fetchDeviceTypes();
+    fetchSuppliers();
   }, []);
 
   const FormSchema = z.object({
@@ -91,19 +104,26 @@ export default function AddAssetComponent() {
     serialNumber: z.string().min(1, {
       message: t("ui.message.serialNumberRequired"),
     }),
-    deviceModelId: z.string().optional(),
-    deviceTypeId: z.string().optional(),
+    deviceModelId: z.string().min(1, {
+      message: t("ui.message.deviceModelRequired"),
+    }),
+    deviceTypeId: z.string().min(1, {
+      message: t("ui.message.deviceTypeRequired"),
+    }),
+    supplierId: z.string().min(1, {
+      message: t("ui.message.supplierRequired"),
+    }),
     purchaseDate: z.date({
       required_error: t("ui.message.purchaseDateRequired"),
     }),
     warranty: z.string().min(1, {
       message: t("ui.message.warrantyRequired"),
     }),
-    cpu: z.string().optional(),
-    ram: z.string().optional(),
-    hardDrive: z.string().optional(),
-    osType: z.string().optional(),
-    macAddress: z.string().optional(),
+    cpu: z.string().nullable(),
+    ram: z.string().nullable(),
+    hardDrive: z.string().nullable(),
+    osType: z.string().nullable(),
+    macAddress: z.string().nullable(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -111,15 +131,16 @@ export default function AddAssetComponent() {
     defaultValues: {
       internalCode: "",
       serialNumber: "",
-      deviceModelId: undefined,
-      deviceTypeId: undefined,
+      deviceModelId: "",
+      deviceTypeId: "",
+      supplierId: "",
       purchaseDate: undefined,
       warranty: "",
-      cpu: "",
-      ram: "",
-      hardDrive: "",
-      osType: "",
-      macAddress: "",
+      cpu: null,
+      ram: null,
+      hardDrive: null,
+      osType: null,
+      macAddress: null,
     },
   });
 
@@ -335,6 +356,70 @@ export default function AddAssetComponent() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="supplierId"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>{t("ui.label.supplier")}</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? suppliers.find((item) => item.id === field.value)
+                                ?.name
+                            : t("ui.label.supplier")}
+                          <ChevronsUpDown className="opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder={t("ui.label.search")}
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>{t("ui.label.noData")}</CommandEmpty>
+                          <CommandGroup>
+                            {suppliers.map((item) => (
+                              <CommandItem
+                                value={item.name}
+                                key={item.id}
+                                onSelect={() => {
+                                  form.setValue("supplierId", item.id, {
+                                    shouldValidate: true,
+                                  });
+                                }}
+                              >
+                                {item.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    item.id === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}
@@ -450,7 +535,11 @@ export default function AddAssetComponent() {
                 <FormItem>
                   <FormLabel>{t("ui.label.cpu")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("ui.label.cpu")} {...field} />
+                    <Input
+                      placeholder={t("ui.label.cpu")}
+                      {...field}
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -463,7 +552,11 @@ export default function AddAssetComponent() {
                 <FormItem>
                   <FormLabel>{t("ui.label.ram")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("ui.label.ram")} {...field} />
+                    <Input
+                      placeholder={t("ui.label.ram")}
+                      {...field}
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -476,7 +569,11 @@ export default function AddAssetComponent() {
                 <FormItem>
                   <FormLabel>{t("ui.label.hardDrive")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("ui.label.hardDrive")} {...field} />
+                    <Input
+                      placeholder={t("ui.label.hardDrive")}
+                      {...field}
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

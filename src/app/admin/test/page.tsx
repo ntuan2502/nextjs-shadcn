@@ -73,7 +73,7 @@ export default function Test() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       id: "",
-      officeId: "",
+      officeId: undefined,
     },
   });
 

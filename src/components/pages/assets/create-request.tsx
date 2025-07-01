@@ -133,8 +133,8 @@ export default function CreateRequestAssetAdminComponent({
     toUserId: z.string().min(1, {
       message: t("ui.message.toUserRequired"),
     }),
-    note: z.string().optional(),
-    signature: z.string().optional(),
+    note: z.string().nullable(),
+    signature: z.string().nullable(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -147,8 +147,8 @@ export default function CreateRequestAssetAdminComponent({
       departmentId: "",
       fromUserId: "",
       toUserId: "",
-      note: "",
-      signature: "",
+      note: null,
+      signature: null,
     },
   });
 
@@ -181,7 +181,7 @@ export default function CreateRequestAssetAdminComponent({
       formDataToSend.append("fromUserId", data.fromUserId);
       formDataToSend.append("toUserId", data.toUserId);
       formDataToSend.append("type", TransactionType.TRANSFER);
-      formDataToSend.append("note", data.note || "");
+      formDataToSend.append("note", data.note ?? "");
       Array.from(data.relatedAssetsID ?? []).forEach((assetId) => {
         formDataToSend.append("relatedAssets[]", assetId);
       });
@@ -629,6 +629,7 @@ export default function CreateRequestAssetAdminComponent({
                     <Textarea
                       placeholder="Tell us a little bit about yourself"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />

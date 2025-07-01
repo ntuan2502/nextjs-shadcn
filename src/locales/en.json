@@ -128,7 +128,8 @@
       "internationalNameRequired": "International Name is required.",
       "taxCodeNotFound": "Tax Code not found.",
       "informationFound": "Information found: {{name}}",
-      "copied": "Copied {{label}} with value {{value}} to clipboard"
+      "copied": "Copied {{label}} with value {{value}} to clipboard",
+      "supplierRequired": "Supplier is required."
     },
     "placeholder": {
       "search": "Search..."

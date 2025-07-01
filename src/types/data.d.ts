@@ -50,6 +50,7 @@ export type Asset = {
   warranty: number;
   deviceType?: DeviceType;
   deviceModel?: DeviceModel;
+  supplier?: Supplier;
   customProperties?: {
     cpu?: string;
     ram?: string;

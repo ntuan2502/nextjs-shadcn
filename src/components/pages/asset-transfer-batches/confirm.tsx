@@ -12,7 +12,7 @@ import { base64ToFile } from "@/lib/utils";
 import { AssetTransferBatch } from "@/types/data";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { notFound, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import NotFound from "@/app/not-found";
+import LoadingDot from "@/components/loading-dot";
 
 export default function ConfirmAssetTransferBatchComponent({
   id,
@@ -34,7 +36,7 @@ export default function ConfirmAssetTransferBatchComponent({
 }) {
   const { t } = useTranslation();
   const router = useRouter();
-  const [isConfirm, setIsConfirm] = useState(false);
+  const [isConfirm, setIsConfirm] = useState<boolean>();
   const [assetTransferBatch, setAssetTransferBatch] =
     useState<AssetTransferBatch>();
 
@@ -43,25 +45,32 @@ export default function ConfirmAssetTransferBatchComponent({
 
   useEffect(() => {
     async function getConfirmRequest(id: string) {
-      const res = await axios.get(
-        `${ENV.API_URL}/asset-transfer-batches/confirm-request/${id}?type=${type}`
-      );
-      if (res.status === 200) {
+      try {
+        const res = await axios.get(
+          `${ENV.API_URL}/asset-transfer-batches/confirm-request/${id}?type=${type}`
+        );
         setIsConfirm(true);
         setAssetTransferBatch(res.data.data.assetTransferBatch);
-      } else setIsConfirm(false);
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 404) {
+          setIsConfirm(false);
+        } else {
+          console.error(err);
+          handleAxiosError(err);
+        }
+      }
     }
     getConfirmRequest(id);
   }, [id, type]);
 
   const FormSchema = z.object({
-    signature: z.string().optional(),
+    signature: z.string().nullable(),
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      signature: "",
+      signature: null,
     },
   });
 
@@ -94,11 +103,11 @@ export default function ConfirmAssetTransferBatchComponent({
     }
   }
 
-  if (!isConfirm) {
-    return notFound();
+  if (isConfirm === undefined) return <LoadingDot />;
+  else if (isConfirm === false) {
+    return <NotFound />;
   }
 
-  console.log(assetTransferBatch);
   return (
     <div className="w-full mx-auto p-6 space-y-6">
       <div className="flex h-full w-full items-center justify-center">
