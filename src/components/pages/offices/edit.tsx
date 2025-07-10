@@ -41,8 +41,8 @@ export default function EditOfficeComponent({ id }: { id: string }) {
     name: z.string().min(1, {
       message: t("ui.message.nameRequired"),
     }),
-    nameEn: z.string().min(1, {
-      message: t("ui.message.nameEnRequired"),
+    internationalName: z.string().min(1, {
+      message: t("ui.message.internationalNameRequired"),
     }),
     shortName: z.string().min(1, {
       message: t("ui.message.shortNameRequired"),
@@ -57,7 +57,7 @@ export default function EditOfficeComponent({ id }: { id: string }) {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
-      nameEn: "",
+      internationalName: "",
       shortName: "",
       taxCode: "",
       address: "",
@@ -136,12 +136,12 @@ export default function EditOfficeComponent({ id }: { id: string }) {
             />
             <FormField
               control={form.control}
-              name="nameEn"
+              name="internationalName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("ui.label.nameEn")}</FormLabel>
+                  <FormLabel>{t("ui.label.internationalName")}</FormLabel>
                   <FormControl>
-                    <Input placeholder={t("ui.label.nameEn")} {...field} />
+                    <Input placeholder={t("ui.label.internationalName")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

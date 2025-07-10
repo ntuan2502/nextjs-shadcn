@@ -10,7 +10,7 @@ import {
 export type Office = {
   id: string;
   name: string;
-  nameEn?: string;
+  internationalName?: string;
   shortName: string;
   taxCode: string;
   address?: string;

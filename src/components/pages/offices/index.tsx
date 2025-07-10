@@ -131,7 +131,7 @@ export default function OfficesComponent() {
     return offices.filter(
       (item) =>
         item.name?.toLowerCase().includes(keyword) ||
-        item.nameEn?.toLowerCase().includes(keyword) ||
+        item.internationalName?.toLowerCase().includes(keyword) ||
         item.shortName?.toLowerCase().includes(keyword) ||
         item.address?.toLowerCase().includes(keyword) ||
         item.taxCode?.toLowerCase().includes(keyword)
@@ -241,7 +241,7 @@ export default function OfficesComponent() {
                     </TableHead>
                     <TableHead>
                       <p className="text-wrap min-w-40">
-                        {t("ui.label.nameEn")}
+                        {t("ui.label.internationalName")}
                       </p>
                     </TableHead>
                     <TableHead>
@@ -268,7 +268,7 @@ export default function OfficesComponent() {
                           <p className="text-wrap">{item.name}</p>
                         </TableCell>
                         <TableCell>
-                          <p className="text-wrap">{item.nameEn}</p>
+                          <p className="text-wrap">{item.internationalName}</p>
                         </TableCell>
                         <TableCell>
                           <p className="text-wrap">{item.shortName}</p>
@@ -352,7 +352,7 @@ export default function OfficesComponent() {
         title={t("ui.label.office")}
         fields={[
           { label: t("ui.label.name"), value: selectedItem?.name },
-          { label: t("ui.label.nameEn"), value: selectedItem?.nameEn },
+          { label: t("ui.label.internationalName"), value: selectedItem?.internationalName },
           { label: t("ui.label.shortName"), value: selectedItem?.shortName },
           { label: t("ui.label.taxCode"), value: selectedItem?.taxCode },
           { label: t("ui.label.address"), value: selectedItem?.address },
