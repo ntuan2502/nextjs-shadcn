@@ -153,8 +153,6 @@ export default function AssetsComponent() {
     const pageParam = searchParams.get("page");
     const searchParam = searchParams.get("search") ?? "";
 
-    // const fallbackOfficeId = offices.length > 0 ? offices[0].id : "";
-    // const officeToSet = officeParam ?? fallbackOfficeId;
     const officeToSet = officeParam || "";
 
     const pageToSet =
@@ -191,7 +189,7 @@ export default function AssetsComponent() {
       if (!tabSelected) return matchesSearch;
 
       const belongsToSelectedOffice =
-        item.assetTransactions?.[0]?.user?.office?.id === tabSelected;
+        item.assetTransactions?.[0].office?.id === tabSelected;
       return belongsToSelectedOffice && matchesSearch;
     });
   }, [searchQuery, assets, tabSelected]);
