@@ -77,6 +77,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { TransactionDirection, TransactionStatus } from "@/types/enum";
+import * as XLSX from "xlsx";
 
 export default function AssetsComponent() {
   const { t } = useTranslation();
@@ -164,6 +165,47 @@ export default function AssetsComponent() {
     setSearchQuery(searchParam);
     updateURL(officeToSet, searchParam, pageToSet);
   }, [searchParams, pathname, router, updateURL, offices]);
+
+  const exportToExcel = () => {
+    const officeSelected = offices.find((o) => o.id === tabSelected);
+    const exportData = filteredData.map((item) => ({
+      [t("ui.label.internalCode")]: item.internalCode || "",
+      [t("ui.label.deviceType")]: item.deviceType?.name || "",
+      [t("ui.label.deviceModel")]: item.deviceModel?.name || "",
+      [t("ui.label.serialNumber")]: item.serialNumber || "",
+      [t("ui.label.office")]:
+        item.assetTransactions?.[0]?.office?.shortName || "",
+      [t("ui.label.user")]: item.assetTransactions?.[0]?.user?.name || "",
+      [t("ui.label.department")]:
+        item.assetTransactions?.[0]?.department?.name || "",
+      [t("ui.label.cpu")]: item.customProperties?.cpu || "",
+      [t("ui.label.ram")]: item.customProperties?.ram || "",
+      [t("ui.label.hardDrive")]: item.customProperties?.hardDrive || "",
+      [t("ui.label.osType")]: item.customProperties?.osType || "",
+      [t("ui.label.macAddress")]: item.customProperties?.macAddress || "",
+      [t("ui.label.transactionType")]: item.assetTransactions?.[0].type || "",
+      [t("ui.label.purchaseDate")]: item.purchaseDate
+        ? dayjs(item.purchaseDate).format("YYYY-MM-DD")
+        : "",
+      [t("ui.label.warranty")]: item.warranty,
+      [t("ui.label.endOfWarranty")]: item.purchaseDate
+        ? dayjs(item.purchaseDate)
+            .add(item.warranty || 3, "year")
+            .format("YYYY-MM-DD")
+        : "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Assets");
+
+    XLSX.writeFile(
+      workbook,
+      `AssetsReport_${officeSelected?.shortName}_${dayjs().format(
+        "YYYYMMDD_HHmmss"
+      )}.xlsx`
+    );
+  };
 
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
   const filteredData = useMemo(() => {
@@ -355,6 +397,13 @@ export default function AssetsComponent() {
                   <div className="w-4 h-4 bg-red-400 rounded-sm"></div>
                   <div>{t("ui.label.endOfLife")}</div>
                 </div>
+                <Button
+                  className="p-4 rounded-full text-white"
+                  color="blue"
+                  onClick={exportToExcel}
+                >
+                  Export to .xlsx
+                </Button>
               </div>
             </div>
           </CardHeader>
@@ -618,10 +667,6 @@ export default function AssetsComponent() {
           {
             label: t("ui.label.serialNumber"),
             value: selectedItem?.serialNumber,
-          },
-          {
-            label: t("ui.label.internalCode"),
-            value: selectedItem?.internalCode,
           },
           {
             label: t("ui.label.user"),
